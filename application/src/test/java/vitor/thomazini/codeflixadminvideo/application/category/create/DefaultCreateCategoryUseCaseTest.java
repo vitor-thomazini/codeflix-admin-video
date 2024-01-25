@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.category;
+package vitor.thomazini.codeflixadminvideo.application.category.create;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import vitor.thomazini.codeflixadminvideo.application.category.create.CreateCategoryCommand;
+import vitor.thomazini.codeflixadminvideo.application.category.create.DefaultCreateCategoryUseCase;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 
 import java.util.Objects;

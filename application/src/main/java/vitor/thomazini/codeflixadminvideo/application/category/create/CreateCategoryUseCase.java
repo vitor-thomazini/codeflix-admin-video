@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.category;
+package vitor.thomazini.codeflixadminvideo.application.category.create;
 
 import io.vavr.control.Either;
 import vitor.thomazini.codeflixadminvideo.application.UseCase;

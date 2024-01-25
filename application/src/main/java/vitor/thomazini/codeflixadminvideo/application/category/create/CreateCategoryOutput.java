@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.category;
+package vitor.thomazini.codeflixadminvideo.application.category.create;
 
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 

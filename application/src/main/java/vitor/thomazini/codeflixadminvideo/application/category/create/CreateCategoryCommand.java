@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.category;
+package vitor.thomazini.codeflixadminvideo.application.category.create;
 
 public record CreateCategoryCommand(
         String name,
