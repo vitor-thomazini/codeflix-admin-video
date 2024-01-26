@@ -41,10 +41,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     testImplementation 'org.flywaydb:flyway-core'
+    testImplementation 'org.flywaydb:flyway-mysql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation 'org.testcontainers:mysql:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
 
     testRuntimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
+}
+
+flyway {
+    url = System.getenv('FLYWAY_DB') ?: 'jdbc:mysql://localhost:3306/adm_videos?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8'
+    user = System.getenv('FLYWAY_USER') ?: 'root'
+    password = System.getenv('FLYWAY_PASSWORD') ?: '123456'
 }
 
 tasks.named('test') {
