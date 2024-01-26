@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo;
+package vitor.thomazini.codeflixadminvideo.infrastructure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
