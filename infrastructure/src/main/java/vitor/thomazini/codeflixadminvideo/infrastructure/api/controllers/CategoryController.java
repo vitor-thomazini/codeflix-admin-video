@@ -15,10 +15,10 @@ import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification;
 import vitor.thomazini.codeflixadminvideo.infrastructure.api.CategoryAPI;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryApiOutput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListApiOutput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryApiInput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryApiInput;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.presenters.CategoryApiPresenter;
 
 import java.net.URI;
@@ -49,7 +49,7 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public ResponseEntity<?> createCategory(final CreateCategoryApiInput input) {
+    public ResponseEntity<?> createCategory(final CreateCategoryRequest input) {
         final var command = CreateCategoryCommand.with(
                 input.name(),
                 input.description(),
@@ -67,7 +67,7 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public Pagination<CategoryListApiOutput> listCategories(
+    public Pagination<CategoryListResponse> listCategories(
             final String search,
             final int page,
             final int perPage,
@@ -80,14 +80,14 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public CategoryApiOutput getById(final String id) {
+    public CategoryResponse getById(final String id) {
         return CategoryApiPresenter.present
                 .compose(this.getCategoryByIdUseCase::execute)
                 .apply(id);
     }
 
     @Override
-    public ResponseEntity<?> updateById(final String id, final UpdateCategoryApiInput input) {
+    public ResponseEntity<?> updateById(final String id, final UpdateCategoryRequest input) {
         final var command = UpdateCategoryCommand.with(
                 id,
                 input.name(),

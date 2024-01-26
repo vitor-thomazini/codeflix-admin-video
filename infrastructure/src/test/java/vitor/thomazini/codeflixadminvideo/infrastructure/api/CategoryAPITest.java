@@ -23,8 +23,8 @@ import vitor.thomazini.codeflixadminvideo.domain.exception.NotFoundException;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 import vitor.thomazini.codeflixadminvideo.domain.validation.Error;
 import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryApiInput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryApiInput;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,7 +69,7 @@ public class CategoryAPITest {
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
-        final var input = new CreateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new CreateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(this.createCategoryUseCase.execute(any()))
                 .thenReturn(Right(CreateCategoryOutput.from("123")));
@@ -103,7 +103,7 @@ public class CategoryAPITest {
         final var expectedIsActive = true;
         final var expectedMessage = "'name' should not be null";
 
-        final var input = new CreateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new CreateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(this.createCategoryUseCase.execute(any()))
                 .thenReturn(Left(Notification.create(new Error(expectedMessage))));
@@ -138,7 +138,7 @@ public class CategoryAPITest {
         final var expectedIsActive = true;
         final var expectedMessage = "'name' should not be null";
 
-        final var input = new CreateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new CreateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(this.createCategoryUseCase.execute(any()))
                 .thenThrow(DomainException.with(new Error(expectedMessage)));
@@ -231,7 +231,7 @@ public class CategoryAPITest {
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
 
-        final var input = new UpdateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(this.updateCategoryUseCase.execute(any()))
                 .thenReturn(Right(UpdateCategoryOutput.from(expectedId)));
@@ -266,7 +266,7 @@ public class CategoryAPITest {
         final var expectedIsActive = true;
         final var expectedErrorMessage = "Category with ID not-found was not found";
 
-        final var input = new UpdateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(updateCategoryUseCase.execute(any()))
                 .thenThrow(NotFoundException.with(Category.class, CategoryId.from(expectedId)));
@@ -302,7 +302,7 @@ public class CategoryAPITest {
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
-        final var input = new UpdateCategoryApiInput(expectedName, expectedDescription, expectedIsActive);
+        final var input = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
         when(updateCategoryUseCase.execute(any()))
                 .thenReturn(Left(Notification.create(new Error(expectedErrorMessage))));

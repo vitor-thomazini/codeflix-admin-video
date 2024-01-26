@@ -9,10 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryApiOutput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListApiOutput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryApiInput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryApiInput;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
 
 @RequestMapping(value = "categories")
 @Tag(name = "Categories")
@@ -28,7 +28,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
-    ResponseEntity<?> createCategory(@RequestBody CreateCategoryApiInput input);
+    ResponseEntity<?> createCategory(@RequestBody CreateCategoryRequest input);
 
     @GetMapping
     @Operation(summary = "List all categories paginated")
@@ -37,7 +37,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A invalid parameter was received"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
-    Pagination<CategoryListApiOutput> listCategories(
+    Pagination<CategoryListResponse> listCategories(
             @RequestParam(name = "search", required = false, defaultValue = "") final String search,
             @RequestParam(name = "page", required = false, defaultValue = "0") final int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
@@ -56,7 +56,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "404", description = "Category was not found"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown")
     })
-    CategoryApiOutput getById(@PathVariable(name = "id") String id);
+    CategoryResponse getById(@PathVariable(name = "id") String id);
 
     @PutMapping(
             value = "{id}",
@@ -71,7 +71,7 @@ public interface CategoryAPI {
     })
     ResponseEntity<?> updateById(
             @PathVariable(name = "id") String id,
-            @RequestBody UpdateCategoryApiInput input
+            @RequestBody UpdateCategoryRequest input
     );
 
     @DeleteMapping(
