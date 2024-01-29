@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
 import vitor.thomazini.codeflixadminvideo.application.category.retrieve.list.ListCategoriesUseCase;
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryJpaEntity;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryRepository;
 
@@ -49,7 +49,7 @@ public class ListCategoryUseCaseIT {
         final var expectedItemsCount = 0;
         final var expectedTotal = 0;
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -88,7 +88,7 @@ public class ListCategoryUseCaseIT {
         final var expectedSort = "name";
         final var expectedDirection = "asc";
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -126,7 +126,7 @@ public class ListCategoryUseCaseIT {
         // Arrange
         final var expectedTerms = "";
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -164,7 +164,7 @@ public class ListCategoryUseCaseIT {
         final var expectedDirection = "asc";
         final var expectedTerms = "";
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,

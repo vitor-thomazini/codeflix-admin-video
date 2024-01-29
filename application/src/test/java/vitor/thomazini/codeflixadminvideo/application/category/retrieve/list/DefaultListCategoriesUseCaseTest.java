@@ -10,12 +10,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +45,7 @@ public class DefaultListCategoriesUseCaseTest {
         final var expectedTerms = "";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
-        final var query = new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var query = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
         final var expectedPagination = new Pagination<>(expectedPage, expectedPerPage, categories.size(), categories);
         final var expectedItemsCount = 2;
         final var expectedResults = expectedPagination.map(CategoryListOutput::from);
@@ -74,7 +73,7 @@ public class DefaultListCategoriesUseCaseTest {
         final var expectedTerms = "";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
-        final var query = new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var query = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
         final var expectedPagination = new Pagination<>(expectedPage, expectedPerPage, categories.size(), categories);
         final var expectedItemsCount = 0;
         final var expectedResults = expectedPagination.map(CategoryListOutput::from);
@@ -101,7 +100,7 @@ public class DefaultListCategoriesUseCaseTest {
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
         final var expectedErrorMessage = "Gateway error";
-        final var query = new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var query = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
         when(categoryGateway.findAll(eq(query)))
                 .thenThrow(new IllegalStateException(expectedErrorMessage));

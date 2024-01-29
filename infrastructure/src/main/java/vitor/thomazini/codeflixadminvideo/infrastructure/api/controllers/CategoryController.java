@@ -11,7 +11,7 @@ import vitor.thomazini.codeflixadminvideo.application.category.retrieve.list.Lis
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryCommand;
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryOutput;
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryUseCase;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification;
 import vitor.thomazini.codeflixadminvideo.infrastructure.api.CategoryAPI;
@@ -74,7 +74,7 @@ public class CategoryController implements CategoryAPI {
             final String sort,
             final String direction
     ) {
-        final var searchQuery = new CategorySearchQuery(page, perPage, search, sort, direction);
+        final var searchQuery = new SearchQuery(page, perPage, search, sort, direction);
         return this.listCategoriesUseCase.execute(searchQuery)
                 .map(CategoryApiPresenter::present);
     }

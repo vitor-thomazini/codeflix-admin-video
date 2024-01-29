@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryJpaEntity;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryRepository;
@@ -49,7 +49,7 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public Pagination<Category> findAll(final CategorySearchQuery query) {
+    public Pagination<Category> findAll(final SearchQuery query) {
         final var page = PageRequest.of(
                 query.page(),
                 query.perPage(),

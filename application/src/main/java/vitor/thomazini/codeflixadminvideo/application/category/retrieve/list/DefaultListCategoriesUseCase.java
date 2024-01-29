@@ -1,7 +1,7 @@
 package vitor.thomazini.codeflixadminvideo.application.category.retrieve.list;
 
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategorySearchQuery;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 
 import java.util.Objects;
@@ -15,7 +15,7 @@ public class DefaultListCategoriesUseCase extends ListCategoriesUseCase {
     }
 
     @Override
-    public Pagination<CategoryListOutput> execute(final CategorySearchQuery query) {
+    public Pagination<CategoryListOutput> execute(final SearchQuery query) {
         return this.categoryGateway.findAll(query)
                 .map(CategoryListOutput::from);
     }

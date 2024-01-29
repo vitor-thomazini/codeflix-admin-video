@@ -1,6 +1,6 @@
-package vitor.thomazini.codeflixadminvideo.domain.category;
+package vitor.thomazini.codeflixadminvideo.domain.pagination;
 
-public record CategorySearchQuery(
+public record SearchQuery(
         int page,
         int perPage,
         String terms,
