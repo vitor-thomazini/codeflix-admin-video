@@ -1,10 +1,14 @@
 package vitor.thomazini.codeflixadminvideo.application.genre.create;
 
+import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
+import vitor.thomazini.codeflixadminvideo.domain.exception.DomainException;
+import vitor.thomazini.codeflixadminvideo.domain.exception.NotFoundException;
 import vitor.thomazini.codeflixadminvideo.domain.exception.NotificationException;
 import vitor.thomazini.codeflixadminvideo.domain.genre.Genre;
 import vitor.thomazini.codeflixadminvideo.domain.genre.GenreGateway;
+import vitor.thomazini.codeflixadminvideo.domain.genre.GenreId;
 import vitor.thomazini.codeflixadminvideo.domain.validation.Error;
 import vitor.thomazini.codeflixadminvideo.domain.validation.ValidationHandler;
 import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification;
@@ -12,6 +16,7 @@ import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class DefaultCreateGenreUseCase extends CreateGenreUseCase {
@@ -65,7 +70,7 @@ public class DefaultCreateGenreUseCase extends CreateGenreUseCase {
         return notification;
     }
 
-    private List<CategoryId> toCategoryId(List<String> categories) {
+    private List<CategoryId> toCategoryId(final List<String> categories) {
         return categories.stream()
                 .map(CategoryId::from)
                 .toList();
