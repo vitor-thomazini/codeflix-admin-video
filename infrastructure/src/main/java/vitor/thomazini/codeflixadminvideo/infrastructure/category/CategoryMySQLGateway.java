@@ -13,8 +13,7 @@ import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.Ca
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryRepository;
 import vitor.thomazini.codeflixadminvideo.infrastructure.utils.SpecificationUtils;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class CategoryMySQLGateway implements CategoryGateway {
@@ -72,6 +71,12 @@ public class CategoryMySQLGateway implements CategoryGateway {
                 pageResult.getTotalElements(),
                 pageResult.map(CategoryJpaEntity::toAggregate).toList()
         );
+    }
+
+    @Override
+    public List<CategoryId> existsByIds(final Iterable<CategoryId> ids) {
+        // TODO: Implementar
+        return Collections.emptyList();
     }
 
     private Category save(Category category) {

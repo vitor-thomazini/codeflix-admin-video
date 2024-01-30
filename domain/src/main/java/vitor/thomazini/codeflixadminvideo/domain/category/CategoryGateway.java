@@ -3,6 +3,8 @@ package vitor.thomazini.codeflixadminvideo.domain.category;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryGateway {
@@ -16,4 +18,6 @@ public interface CategoryGateway {
     Category update(Category category);
 
     Pagination<Category> findAll(SearchQuery query);
+
+    List<CategoryId> existsByIds(Iterable<CategoryId> ids);
 }
