@@ -11,12 +11,12 @@ import vitor.thomazini.codeflixadminvideo.application.category.retrieve.list.Lis
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryCommand;
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryOutput;
 import vitor.thomazini.codeflixadminvideo.application.category.update.UpdateCategoryUseCase;
-import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.validation.handler.Notification;
 import vitor.thomazini.codeflixadminvideo.infrastructure.api.CategoryAPI;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.presenters.CategoryApiPresenter;

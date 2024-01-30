@@ -1,8 +1,8 @@
 package vitor.thomazini.codeflixadminvideo.application.category.retrieve.list;
 
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
-import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
+import vitor.thomazini.codeflixadminvideo.domain.pagination.SearchQuery;
 
 import java.util.Objects;
 

@@ -1,25 +1,21 @@
 package vitor.thomazini.codeflixadminvideo.application.category.create;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import vitor.thomazini.codeflixadminvideo.application.category.create.CreateCategoryCommand;
-import vitor.thomazini.codeflixadminvideo.application.category.create.DefaultCreateCategoryUseCase;
+import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class DefaultCreateCategoryUseCaseTest {
+public class DefaultCreateCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultCreateCategoryUseCase useCase;
@@ -27,9 +23,9 @@ public class DefaultCreateCategoryUseCaseTest {
     @Mock
     private CategoryGateway categoryGateway;
 
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(categoryGateway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(categoryGateway);
     }
 
     @Test

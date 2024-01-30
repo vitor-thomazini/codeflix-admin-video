@@ -1,22 +1,20 @@
 package vitor.thomazini.codeflixadminvideo.application.category.delete;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class DefaultDeleteCategoryUseCaseTest {
+public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultDeleteCategoryUseCase useCase;
@@ -24,10 +22,9 @@ public class DefaultDeleteCategoryUseCaseTest {
     @Mock
     private CategoryGateway categoryGateway;
 
-
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(categoryGateway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(categoryGateway);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package vitor.thomazini.codeflixadminvideo.domain.genre;
 
 import vitor.thomazini.codeflixadminvideo.domain.AggregateRoot;
-import vitor.thomazini.codeflixadminvideo.domain.category.Category;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 import vitor.thomazini.codeflixadminvideo.domain.exception.NotificationException;
 import vitor.thomazini.codeflixadminvideo.domain.utils.InstantUtils;

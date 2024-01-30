@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vitor.thomazini.codeflixadminvideo.domain.pagination.Pagination;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
 

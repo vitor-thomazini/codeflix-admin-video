@@ -2,8 +2,8 @@ package vitor.thomazini.codeflixadminvideo.infrastructure.category.presenters;
 
 import vitor.thomazini.codeflixadminvideo.application.category.retrieve.get.CategoryOutput;
 import vitor.thomazini.codeflixadminvideo.application.category.retrieve.list.CategoryListOutput;
-import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryListResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 
 import java.util.function.Function;
 

@@ -1,7 +1,6 @@
 package vitor.thomazini.codeflixadminvideo.domain.genre;
 
 import vitor.thomazini.codeflixadminvideo.domain.Identifier;
-import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 
 import java.util.Objects;
 import java.util.UUID;

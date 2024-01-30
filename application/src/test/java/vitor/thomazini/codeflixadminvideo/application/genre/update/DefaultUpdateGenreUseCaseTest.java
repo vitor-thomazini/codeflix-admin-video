@@ -2,10 +2,9 @@ package vitor.thomazini.codeflixadminvideo.application.genre.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryGateway;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 import vitor.thomazini.codeflixadminvideo.domain.exception.NotificationException;
@@ -20,8 +19,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class DefaultUpdateGenreUseCaseTest {
+public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultUpdateGenreUseCase useCase;
@@ -31,6 +29,11 @@ public class DefaultUpdateGenreUseCaseTest {
 
     @Mock
     private GenreGateway genreGateway;
+
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(categoryGateway, genreGateway);
+    }
 
     @Test
     public void givenAValidCommand_whenCallsUpdateGenre_thenShouldReturnGenreId() {
@@ -251,7 +254,7 @@ public class DefaultUpdateGenreUseCaseTest {
         verify(genreGateway, times(0)).update(any());
     }
 
-    public List<String> asString(final List<CategoryId> categories) {
+    private List<String> asString(final List<CategoryId> categories) {
         return categories.stream()
                 .map(CategoryId::value)
                 .toList();
