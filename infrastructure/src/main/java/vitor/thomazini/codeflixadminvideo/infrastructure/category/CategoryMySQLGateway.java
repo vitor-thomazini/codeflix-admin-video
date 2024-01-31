@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static vitor.thomazini.codeflixadminvideo.infrastructure.utils.SpecificationUtils.like;
+
 @Component
 public class CategoryMySQLGateway implements CategoryGateway {
 
@@ -60,14 +62,10 @@ public class CategoryMySQLGateway implements CategoryGateway {
 
         final var specifications = Optional.ofNullable(query.terms())
                 .filter(str -> !str.isBlank())
-                .map(str -> {
-                    final var nameLike = SpecificationUtils.<CategoryJpaEntity>like("name", str);
-                    final var descriptionLike = SpecificationUtils.<CategoryJpaEntity>like("description", str);
-                    return nameLike.or(descriptionLike);
-                })
+                .map(this::assembleSpecification)
                 .orElse(null);
 
-        final var pageResult =this.repository.findAll(Specification.where(specifications), page);
+        final var pageResult = this.repository.findAll(Specification.where(specifications), page);
         return new Pagination<>(
                 pageResult.getNumber(),
                 pageResult.getSize(),
@@ -85,5 +83,11 @@ public class CategoryMySQLGateway implements CategoryGateway {
     private Category save(Category category) {
         final var entity = CategoryJpaEntity.from(category);
         return this.repository.save(entity).toAggregate();
+    }
+
+    private Specification<CategoryJpaEntity> assembleSpecification(final String str) {
+        final Specification<CategoryJpaEntity> nameLike = like("name", str);
+        final Specification<CategoryJpaEntity> descriptionLike = like("description", str);
+        return nameLike.or(descriptionLike);
     }
 }
