@@ -15,14 +15,9 @@ import java.lang.annotation.*;
 @Inherited
 @ActiveProfiles("test-integration")
 @WebMvcTest
-@ContextConfiguration(classes = ControllerTest.ContextConfiguration.class)
 @Import(ObjectMapperConfig.class)
 public @interface ControllerTest {
 
     @AliasFor(annotation = WebMvcTest.class, attribute = "controllers")
     Class<?>[] controllers() default {};
-
-    @ComponentScan("vitor.thomazini.codeflixadminvideo.infrastructure.api.controllers")
-    class ContextConfiguration {
-    }
 }
