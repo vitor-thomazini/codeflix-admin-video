@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.update;
+package vitor.thomazini.codeflixadminvideo.application.category.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

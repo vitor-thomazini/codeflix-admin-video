@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.retrieve.list;
+package vitor.thomazini.codeflixadminvideo.application.category.retrieve.list;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

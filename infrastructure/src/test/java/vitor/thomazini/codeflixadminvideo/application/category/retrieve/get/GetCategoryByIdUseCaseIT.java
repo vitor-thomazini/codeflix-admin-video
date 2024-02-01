@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application.retrieve.get;
+package vitor.thomazini.codeflixadminvideo.application.category.retrieve.get;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
