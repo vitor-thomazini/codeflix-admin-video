@@ -121,7 +121,6 @@ public class CategoryMySQLGatewayTest {
         Assertions.assertEquals(0, categoryRepository.count());
     }
 
-
     @Test
     public void givenAnInvalidCategoryId_whenTryDeleteIt_thenShouldDeleteCategory() {
         // Arrange
@@ -359,5 +358,36 @@ public class CategoryMySQLGatewayTest {
         Assertions.assertEquals(expectedTotal, actualResult.total());
         Assertions.assertEquals(expectedPerPage, actualResult.items().size());
         Assertions.assertEquals(movies.id(), actualResult.items().get(0).id());
+    }
+
+    @Test
+    public void givenPrePersistedCategories_whenCallsExistsByIds_shouldReturnIds() {
+        // Arrange
+        final var movies = Category.newCategory("Filmes", "A categoria mais assistida", true);
+        final var series = Category.newCategory("Séries", "Uma categoria assistida", true);
+        final var documentaries = Category.newCategory("Documentários", "A categoria menos assistida", true);
+
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        categoryRepository.saveAll(List.of(
+                CategoryJpaEntity.from(movies),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)
+        ));
+
+        Assertions.assertEquals(3, categoryRepository.count());
+
+        final var expectedIds = List.of(movies.id(), series.id());
+
+        final var ids = List.of(movies.id(), series.id(), CategoryId.from("123"));
+
+        // Act
+        final var actualResult = categoryGateway.existsByIds(ids);
+
+        // Assert
+        Assertions.assertTrue(
+                expectedIds.size() == actualResult.size() &&
+                        expectedIds.containsAll(actualResult)
+        );
     }
 }
