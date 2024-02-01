@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static vitor.thomazini.codeflixadminvideo.infrastructure.utils.SpecificationUtils.like;
 
@@ -75,9 +76,13 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public List<CategoryId> existsByIds(final Iterable<CategoryId> ids) {
-        // TODO: Implementar
-        return Collections.emptyList();
+    public List<CategoryId> existsByIds(final Iterable<CategoryId> categoryIds) {
+        final var ids = StreamSupport.stream(categoryIds.spliterator(), false)
+                .map(CategoryId::value)
+                .toList();
+        return this.repository.existsByIds(ids).stream()
+                .map(CategoryId::from)
+                .toList();
     }
 
     private Category save(Category category) {

@@ -9,7 +9,7 @@ import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 
 import java.time.Instant;
 
-@Entity
+@Entity(name = "Category")
 @Table(name = "categories")
 public class CategoryJpaEntity {
     @Id
