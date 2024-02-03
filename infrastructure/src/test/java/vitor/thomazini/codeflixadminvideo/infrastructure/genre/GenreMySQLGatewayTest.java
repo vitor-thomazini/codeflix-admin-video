@@ -432,7 +432,7 @@ public class GenreMySQLGatewayTest {
         // Arrange
         mockGenres();
 
-        final int expectedPage = 1;
+        final int expectedPage = 0;
         final int expectedPerPage = 10;
         final int expectedItemsCount = 1;
         final long expectedTotal = 1;
@@ -473,10 +473,10 @@ public class GenreMySQLGatewayTest {
         // Arrange
         mockGenres();
 
-        final int expectedPage = 1;
-        final int expectedPerPage = 10;
+        final int expectedPage = 0;
+        final int expectedPerPage = 1;
         final int expectedItemsCount = 1;
-        final long expectedTotal = 1;
+        final long expectedTotal = 5;
         final var expectedTerms = "";
 
         final var aQuery = new SearchQuery(
