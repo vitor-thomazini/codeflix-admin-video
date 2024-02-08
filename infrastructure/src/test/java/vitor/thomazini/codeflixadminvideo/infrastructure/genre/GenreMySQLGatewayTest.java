@@ -396,7 +396,7 @@ public class GenreMySQLGatewayTest {
 
     @Test
     public void givenEmptyGenres_whenCallFindAll_shouldReturnEmptyList() {
-        // given
+        // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 1;
         final var expectedTerms = "";
@@ -407,10 +407,10 @@ public class GenreMySQLGatewayTest {
         final var aQuery =
                 new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        // when
+        // Act
         final var actualPage = genreGateway.findAll(aQuery);
 
-        // then
+        // Assert
         Assertions.assertEquals(expectedPage, actualPage.currentPage());
         Assertions.assertEquals(expectedPerPage, actualPage.perPage());
         Assertions.assertEquals(expectedTotal, actualPage.total());
