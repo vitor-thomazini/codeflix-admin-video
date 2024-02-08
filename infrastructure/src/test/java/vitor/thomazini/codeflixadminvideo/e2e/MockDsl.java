@@ -5,8 +5,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import vitor.thomazini.codeflixadminvideo.domain.Identifier;
+import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
+import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberType;
 import vitor.thomazini.codeflixadminvideo.domain.category.CategoryId;
 import vitor.thomazini.codeflixadminvideo.domain.genre.GenreId;
+import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.models.CastMemberResponse;
+import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.models.CreateCastMemberRequest;
+import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.models.UpdateCastMemberRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CategoryResponse;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.CreateCategoryRequest;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.models.UpdateCategoryRequest;
@@ -24,11 +29,52 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public interface MockDsl {
 
     MockMvc mvc();
-    
+
+    /**
+     * Cast Member
+     */
+    default ResultActions deleteACastMember(final CastMemberId anId) throws Exception {
+        return this.delete("/cast_members/", anId);
+    }
+
+    default CastMemberId givenACastMember(final String aName, final CastMemberType aType) throws Exception {
+        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
+        final var actualId = this.given("/cast_members", aRequestBody);
+        return CastMemberId.from(actualId);
+    }
+
+    default ResultActions givenACastMemberResult(final String aName, final CastMemberType aType) throws Exception {
+        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
+        return this.givenResult("/cast_members", aRequestBody);
+    }
+
+    default ResultActions listCastMembers(final int page, final int perPage) throws Exception {
+        return listCastMembers(page, perPage, "", "", "");
+    }
+
+    default ResultActions listCastMembers(final int page, final int perPage, final String search) throws Exception {
+        return listCastMembers(page, perPage, search, "", "");
+    }
+
+    default ResultActions listCastMembers(final int page, final int perPage, final String search, final String sort, final String direction) throws Exception {
+        return this.list("/cast_members", page, perPage, search, sort, direction);
+    }
+
+    default CastMemberResponse retrieveACastMember(final CastMemberId anId) throws Exception {
+        return this.retrieve("/cast_members/", anId, CastMemberResponse.class);
+    }
+
+    default ResultActions retrieveACastMemberResult(final CastMemberId anId) throws Exception {
+        return this.retrieveResult("/cast_members/", anId);
+    }
+
+    default ResultActions updateACastMember(final CastMemberId anId, final String aName, final CastMemberType aType) throws Exception {
+        return this.update("/cast_members/", anId, new UpdateCastMemberRequest(aName, aType));
+    }
+
     /**
      * Category
      */
-
     default ResultActions deleteACategory(final CategoryId anId) throws Exception {
         return this.delete("/categories/", anId);
     }
@@ -62,7 +108,6 @@ public interface MockDsl {
     /**
      * Genre
      */
-
     default ResultActions deleteAGenre(final GenreId anId) throws Exception {
         return this.delete("/genres/", anId);
     }
