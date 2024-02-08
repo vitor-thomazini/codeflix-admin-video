@@ -4,6 +4,7 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.persistence.CastMemberRepository;
 import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.CategoryRepository;
 import vitor.thomazini.codeflixadminvideo.infrastructure.genre.persistence.GenreRepository;
 
@@ -15,6 +16,7 @@ public class MySQLCleanUpExtension implements BeforeEachCallback {
     public void beforeEach(final ExtensionContext context) {
         final var appContext = SpringExtension.getApplicationContext(context);
         this.cleanUp(List.of(
+                appContext.getBean(CastMemberRepository.class),
                 appContext.getBean(GenreRepository.class),
                 appContext.getBean(CategoryRepository.class)
         ));
