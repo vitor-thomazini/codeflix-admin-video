@@ -1,6 +1,7 @@
 package vitor.thomazini.codeflixadminvideo.domain.castmember;
 
 import vitor.thomazini.codeflixadminvideo.domain.Identifier;
+import vitor.thomazini.codeflixadminvideo.domain.utils.IdUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public class CastMemberId extends Identifier {
     }
 
     public static CastMemberId unique() {
-        return CastMemberId.from(UUID.randomUUID().toString());
+        return CastMemberId.from(IdUtils.uuid());
     }
 
     public static CastMemberId from(final String anId) {

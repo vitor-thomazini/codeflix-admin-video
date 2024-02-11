@@ -1,6 +1,7 @@
 package vitor.thomazini.codeflixadminvideo.domain.category;
 
 import vitor.thomazini.codeflixadminvideo.domain.Identifier;
+import vitor.thomazini.codeflixadminvideo.domain.utils.IdUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -14,15 +15,11 @@ public class CategoryId extends Identifier {
     }
 
     public static CategoryId unique() {
-        return CategoryId.from(UUID.randomUUID());
+        return CategoryId.from(IdUtils.uuid());
     }
 
     public static CategoryId from(final String id) {
         return new CategoryId(id);
-    }
-
-    public static CategoryId from(final UUID id) {
-        return new CategoryId(id.toString().toLowerCase());
     }
 
     @Override

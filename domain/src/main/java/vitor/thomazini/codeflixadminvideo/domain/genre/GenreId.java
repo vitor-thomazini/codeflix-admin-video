@@ -1,6 +1,7 @@
 package vitor.thomazini.codeflixadminvideo.domain.genre;
 
 import vitor.thomazini.codeflixadminvideo.domain.Identifier;
+import vitor.thomazini.codeflixadminvideo.domain.utils.IdUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -14,15 +15,11 @@ public class GenreId extends Identifier {
     }
 
     public static GenreId unique() {
-        return GenreId.from(UUID.randomUUID());
+        return GenreId.from(IdUtils.uuid());
     }
 
     public static GenreId from(final String id) {
         return new GenreId(id);
-    }
-
-    public static GenreId from(final UUID id) {
-        return new GenreId(id.toString().toLowerCase());
     }
 
     @Override
