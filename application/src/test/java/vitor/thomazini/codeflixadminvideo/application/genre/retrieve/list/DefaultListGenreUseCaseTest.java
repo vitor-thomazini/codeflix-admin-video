@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.retrieve.list;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -15,7 +16,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class DefaultListGenreUseCaseTest extends UseCaseTest {
+class DefaultListGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultListGenreUseCase useCase;
@@ -29,7 +30,7 @@ public class DefaultListGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListGenre_thenShouldReturnGenre() {
+    void givenAValidQuery_whenCallsListGenre_thenShouldReturnGenre() {
         // Arrange
         final var genres = List.of(
                 Genre.newGenre("Ação", true),
@@ -73,11 +74,11 @@ public class DefaultListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        verify(genreGateway, times(1)).findAll(eq(query));
+        verify(genreGateway, times(1)).findAll(query);
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_thenShouldReturnGenre() {
+    void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_thenShouldReturnGenre() {
         // Arrange
         final var genres = List.<Genre>of();
 
@@ -116,11 +117,11 @@ public class DefaultListGenreUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        verify(genreGateway, times(1)).findAll(eq(query));
+        verify(genreGateway, times(1)).findAll(query);
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_thenShouldReturnException() {
+    void givenAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_thenShouldReturnException() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -142,13 +143,13 @@ public class DefaultListGenreUseCaseTest extends UseCaseTest {
                 .thenThrow(new IllegalStateException(expectedErrorMessage));
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> {
-            useCase.execute(query);
-        });
+        final Executable action = () -> useCase.execute(query);
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        verify(genreGateway, times(1)).findAll(eq(query));
+        verify(genreGateway, times(1)).findAll(query);
     }
 }

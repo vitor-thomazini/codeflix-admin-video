@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.MySQLGatewayTest;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMember;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
@@ -16,11 +15,11 @@ import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.persistence.
 
 import java.util.List;
 
-import static vitor.thomazini.codeflixadminvideo.Fixture.CastMembers.type;
-import static vitor.thomazini.codeflixadminvideo.Fixture.name;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.CastMembers.type;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.name;
 
 @MySQLGatewayTest
-public class CastMemberMySQLGatewayTest {
+class CastMemberMySQLGatewayTest {
 
     @Autowired
     private CastMemberMySQLGateway castMemberGateway;
@@ -29,13 +28,12 @@ public class CastMemberMySQLGatewayTest {
     private CastMemberRepository castMemberRepository;
 
     @Test
-    public void givenAValidCastMember_whenCallsCreate_shouldPersistIt() {
+    void givenAValidCastMember_whenCallsCreate_shouldPersistIt() {
         // Arrange
-
         final var expectedName = name();
         final var expectedType = type();
 
-        final var aMember = CastMember.newMember(expectedName, expectedType);
+        final var aMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aMember.id();
 
         Assertions.assertEquals(0, castMemberRepository.count());
@@ -62,12 +60,12 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidCastMember_whenCallsUpdate_shouldRefreshIt() {
+    void givenAValidCastMember_whenCallsUpdate_shouldRefreshIt() {
         // Arrange
         final var expectedName = name();
         final var expectedType = CastMemberType.ACTOR;
 
-        final var aMember = CastMember.newMember("vind", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("vind", CastMemberType.DIRECTOR);
         final var expectedId = aMember.id();
 
         final var currentMember = castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
@@ -100,9 +98,9 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenTwoCastMembersAndOnePersisted_whenCallsExistsByIds_shouldReturnPersistedID() {
+    void givenTwoCastMembersAndOnePersisted_whenCallsExistsByIds_shouldReturnPersistedID() {
         // Arrange
-        final var aMember = CastMember.newMember("Vin", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("Vin", CastMemberType.DIRECTOR);
 
         final var expectedItems = 1;
         final var expectedId = aMember.id();
@@ -116,14 +114,14 @@ public class CastMemberMySQLGatewayTest {
 
         // Assert
         Assertions.assertEquals(expectedItems, actualMember.size());
-        Assertions.assertEquals(expectedId.value(), actualMember.get(0).value());
+        Assertions.assertEquals(expectedId.value(), actualMember.getFirst().value());
     }
 
 
     @Test
-    public void givenAValidCastMember_whenCallsDeleteById_shouldDeleteIt() {
+    void givenAValidCastMember_whenCallsDeleteById_shouldDeleteIt() {
         // Arrange
-        final var aMember = CastMember.newMember(name(), type());
+        final var aMember = CastMember.newCastMember(name(), type());
 
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -137,9 +135,9 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenAnInvalidId_whenCallsDeleteById_shouldBeIgnored() {
+    void givenAnInvalidId_whenCallsDeleteById_shouldBeIgnored() {
         // Arrange
-        final var aMember = CastMember.newMember(name(), type());
+        final var aMember = CastMember.newCastMember(name(), type());
 
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -153,12 +151,12 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidCastMember_whenCallsFindById_shouldReturnIt() {
+    void givenAValidCastMember_whenCallsFindById_shouldReturnIt() {
         // Arrange
         final var expectedName = name();
         final var expectedType = type();
 
-        final var aMember = CastMember.newMember(expectedName, expectedType);
+        final var aMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aMember.id();
 
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
@@ -177,9 +175,9 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenAnInvalidId_whenCallsFindById_shouldReturnEmpty() {
+    void givenAnInvalidId_whenCallsFindById_shouldReturnEmpty() {
         // Arrange
-        final var aMember = CastMember.newMember(name(), type());
+        final var aMember = CastMember.newCastMember(name(), type());
 
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -193,7 +191,7 @@ public class CastMemberMySQLGatewayTest {
     }
 
     @Test
-    public void givenEmptyCastMembers_whenCallsFindAll_shouldReturnEmpty() {
+    void givenEmptyCastMembers_whenCallsFindAll_shouldReturnEmpty() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -223,7 +221,7 @@ public class CastMemberMySQLGatewayTest {
             "har,0,10,1,1,Kit Harington",
             "MAR,0,10,1,1,Martin Scorsese",
     })
-    public void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
+    void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
             final String expectedTerms,
             final int expectedPage,
             final int expectedPerPage,
@@ -258,7 +256,7 @@ public class CastMemberMySQLGatewayTest {
             "createdAt,asc,0,10,5,5,Kit Harington",
             "createdAt,desc,0,10,5,5,Martin Scorsese",
     })
-    public void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnSorted(
+    void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnSorted(
             final String expectedSort,
             final String expectedDirection,
             final int expectedPage,
@@ -292,7 +290,7 @@ public class CastMemberMySQLGatewayTest {
             "1,2,2,5,Martin Scorsese;Quentin Tarantino",
             "2,2,1,5,Vin Diesel",
     })
-    public void givenAValidPagination_whenCallsFindAll_shouldReturnPaginated(
+    void givenAValidPagination_whenCallsFindAll_shouldReturnPaginated(
             final int expectedPage,
             final int expectedPerPage,
             final int expectedItemsCount,
@@ -327,11 +325,11 @@ public class CastMemberMySQLGatewayTest {
 
     private void mockMembers() {
         castMemberRepository.saveAllAndFlush(List.of(
-                CastMemberJpaEntity.from(CastMember.newMember("Kit Harington", CastMemberType.ACTOR)),
-                CastMemberJpaEntity.from(CastMember.newMember("Vin Diesel", CastMemberType.ACTOR)),
-                CastMemberJpaEntity.from(CastMember.newMember("Quentin Tarantino", CastMemberType.DIRECTOR)),
-                CastMemberJpaEntity.from(CastMember.newMember("Jason Momoa", CastMemberType.ACTOR)),
-                CastMemberJpaEntity.from(CastMember.newMember("Martin Scorsese", CastMemberType.DIRECTOR))
+                CastMemberJpaEntity.from(CastMember.newCastMember("Kit Harington", CastMemberType.ACTOR)),
+                CastMemberJpaEntity.from(CastMember.newCastMember("Vin Diesel", CastMemberType.ACTOR)),
+                CastMemberJpaEntity.from(CastMember.newCastMember("Quentin Tarantino", CastMemberType.DIRECTOR)),
+                CastMemberJpaEntity.from(CastMember.newCastMember("Jason Momoa", CastMemberType.ACTOR)),
+                CastMemberJpaEntity.from(CastMember.newCastMember("Martin Scorsese", CastMemberType.DIRECTOR))
         ));
     }
 }

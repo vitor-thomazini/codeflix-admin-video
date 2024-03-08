@@ -201,11 +201,8 @@ public class CategoryE2ETest implements MockDsl {
         final var expectedIsActive = true;
 
         final var requestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
-        final var request = put("/categories/" + actualId.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValue(requestBody));
 
-        this.mvc.perform(request)
+        updateACategory(actualId, requestBody)
                 .andExpect(status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.value()).get();
@@ -231,11 +228,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var requestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
-        final var request = put("/categories/" + actualId.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValue(requestBody));
-
-        this.mvc.perform(request)
+        updateACategory(actualId, requestBody)
                 .andExpect(status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.value()).get();
@@ -261,11 +254,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var requestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 
-        final var request = put("/categories/" + actualId.value())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValue(requestBody));
-
-        this.mvc.perform(request)
+        updateACategory(actualId, requestBody)
                 .andExpect(status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.value()).get();
@@ -285,12 +274,20 @@ public class CategoryE2ETest implements MockDsl {
 
         final var actualId = givenACategory("Filmes", "A categoria mais assistida", true);
 
-        final var request = delete("/categories/" + actualId.value())
-                .contentType(MediaType.APPLICATION_JSON);
-
-        this.mvc.perform(request)
+        deleteACategory(actualId)
                 .andExpect(status().isNoContent());
 
         Assertions.assertFalse(categoryRepository.existsById(actualId.value()));
+    }
+
+    @Test
+    public void asACatalogAdminIShouldNotSeeAnErrorByDeletingANotExistentCategory() throws Exception {
+        Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        deleteACategory(CategoryId.from("12313"))
+                .andExpect(status().isNoContent());
+
+        Assertions.assertEquals(0, categoryRepository.count());
     }
 }

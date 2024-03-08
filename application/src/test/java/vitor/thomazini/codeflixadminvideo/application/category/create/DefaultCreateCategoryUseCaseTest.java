@@ -29,7 +29,7 @@ public class DefaultCreateCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsCreateCategory_thenShouldReturnCategoryId() {
+    void givenAValidCommand_whenCallsCreateCategory_thenShouldReturnCategoryId() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -59,7 +59,7 @@ public class DefaultCreateCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsCreateCategory_thenShouldReturnDomainException() {
+    void givenAnInvalidName_whenCallsCreateCategory_thenShouldReturnDomainException() {
         // Arrange
         final String expectedName = null;
         final var expectedDescription = "A categoria mais assistida";
@@ -80,7 +80,7 @@ public class DefaultCreateCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveCategory_whenCallsCreateCategory_thenShouldReturnInactiveCategoryId() {
+    void givenAValidCommandWithInactiveCategory_whenCallsCreateCategory_thenShouldReturnInactiveCategoryId() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -109,7 +109,7 @@ public class DefaultCreateCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
+    void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";

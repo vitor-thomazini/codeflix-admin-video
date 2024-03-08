@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.create;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -16,10 +17,10 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.CastMembers.type;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.name;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.CastMembers.type;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.name;
 
-public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
+class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultCreateCastMemberUseCase useCase;
@@ -33,7 +34,7 @@ public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsCreateCastMember_shouldReturnIt() {
+    void givenAValidCommand_whenCallsCreateCastMember_shouldReturnIt() {
         // Arrange
         final var expectedName = name();
         final var expectedType = type();
@@ -60,7 +61,7 @@ public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAInvalidName_whenCallsCreateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidName_whenCallsCreateCastMember_shouldThrowsNotificationException() {
         // Arrange
         final String expectedName = null;
         final var expectedType = type();
@@ -71,11 +72,11 @@ public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
         final var aCommand = CreateCastMemberCommand.with(expectedName, expectedType);
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -84,7 +85,7 @@ public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAInvalidType_whenCallsCreateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidType_whenCallsCreateCastMember_shouldThrowsNotificationException() {
         // Arrange
         final var expectedName = name();
         final CastMemberType expectedType = null;
@@ -95,11 +96,11 @@ public class DefaultCreateCastMemberUseCaseTest extends UseCaseTest {
         final var aCommand = CreateCastMemberCommand.with(expectedName, expectedType);
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());

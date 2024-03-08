@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -19,7 +20,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
+class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultUpdateGenreUseCase useCase;
@@ -36,7 +37,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommand_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var genre = Genre.newGenre("acao", true);
 
@@ -65,7 +66,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.value(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        verify(genreGateway, times(1)).findById(expectedId);
         verify(genreGateway, times(1)).update(argThat(updatedGenre ->
                 Objects.equals(expectedId.value(), updatedGenre.id().value()) &&
                         Objects.equals(expectedName, updatedGenre.name()) &&
@@ -78,7 +79,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithCategories_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithCategories_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var movies = CategoryId.from("123");
         final var series = CategoryId.from("456");
@@ -113,8 +114,8 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.value(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+        verify(genreGateway, times(1)).findById(expectedId);
+        verify(categoryGateway, times(1)).existsByIds(expectedCategories);
         verify(genreGateway, times(1)).update(argThat(updatedGenre ->
                 Objects.equals(expectedId.value(), updatedGenre.id().value()) &&
                         Objects.equals(expectedName, updatedGenre.name()) &&
@@ -127,7 +128,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveGenre_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithInactiveGenre_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var genre = Genre.newGenre("acao", true);
 
@@ -159,7 +160,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.value(), actualOutput.id());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        verify(genreGateway, times(1)).findById(expectedId);
         verify(genreGateway, times(1)).update(argThat(updatedGenre ->
                 Objects.equals(expectedId.value(), updatedGenre.id().value()) &&
                         Objects.equals(expectedName, updatedGenre.name()) &&
@@ -172,7 +173,7 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsUpdateGenre_thenShouldReturnNotificationException() {
+    void givenAnInvalidName_whenCallsUpdateGenre_thenShouldReturnNotificationException() {
         // Arrange
         final var genre = Genre.newGenre("acao", true);
 
@@ -195,21 +196,21 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
                 .thenReturn(Optional.of(Genre.from(genre)));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        verify(genreGateway, times(1)).findById(expectedId);
         verify(categoryGateway, times(0)).existsByIds(any());
         verify(genreGateway, times(0)).update(any());
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsUpdateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnNotificationException() {
+    void givenAnInvalidName_whenCallsUpdateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnNotificationException() {
         // Arrange
         final var movies = CategoryId.from("123");
         final var series = CategoryId.from("456");
@@ -240,23 +241,17 @@ public class DefaultUpdateGenreUseCaseTest extends UseCaseTest {
                 .thenReturn(List.of(movies));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessageOne, actualException.errors().get(0).message());
         Assertions.assertEquals(expectedErrorMessageTwo, actualException.errors().get(1).message());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+        verify(genreGateway, times(1)).findById(expectedId);
+        verify(categoryGateway, times(1)).existsByIds(expectedCategories);
         verify(genreGateway, times(0)).update(any());
-    }
-
-    private List<String> asString(final List<CategoryId> categories) {
-        return categories.stream()
-                .map(CategoryId::value)
-                .toList();
     }
 }

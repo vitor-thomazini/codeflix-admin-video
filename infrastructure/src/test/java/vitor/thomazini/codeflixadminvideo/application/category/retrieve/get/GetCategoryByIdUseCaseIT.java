@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.retrieve.get;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
@@ -19,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @IntegrationTest
-public class GetCategoryByIdUseCaseIT {
+class GetCategoryByIdUseCaseIT {
 
     @Autowired
     private GetCategoryByIdUseCase useCase;
@@ -31,7 +32,7 @@ public class GetCategoryByIdUseCaseIT {
     private CategoryGateway categoryGateway;
 
     @Test
-    public void givenAValidId_whenCallGetCategory_thenShouldReturnCategory() {
+    void givenAValidId_whenCallGetCategory_thenShouldReturnCategory() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -54,42 +55,44 @@ public class GetCategoryByIdUseCaseIT {
         Assertions.assertEquals(category.createdAt(), actualCategory.createdAt());
         Assertions.assertEquals(category.deletedAt(), actualCategory.deletedAt());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
     }
 
     @Test
-    public void givenAnInvalidId_whenCallGetCategory_thenShouldReturnNotFound() {
+    void givenAnInvalidId_whenCallGetCategory_thenShouldReturnNotFound() {
         // Arrange
         final var expectedErrorMessage = "Category with ID 123 was not found";
         final var expectedId = CategoryId.from("123");
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class,
-                () -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
     }
 
     @Test
-    public void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
+    void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
         // Arrange
         final var expectedErrorMessage = "Gateway error";
         final var expectedId = CategoryId.from("123");
 
         doThrow(new IllegalStateException(expectedErrorMessage))
-                .when(categoryGateway).findById(eq(expectedId));
+                .when(categoryGateway).findById(expectedId);
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class,
-                () -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
     }
 
     private void save(final Category... categories) {

@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.delete;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 
 @IntegrationTest
-public class DeleteCategoryUseCaseIT {
+class DeleteCategoryUseCaseIT {
 
     @Autowired
     private DeleteCategoryUseCase useCase;
@@ -30,7 +31,7 @@ public class DeleteCategoryUseCaseIT {
     private CategoryGateway categoryGateway;
 
     @Test
-    public void givenAValidId_whenCallDeleteCategory_thenShouldBeOk() {
+    void givenAValidId_whenCallDeleteCategory_thenShouldBeOk() {
         // Arrange
         final var category = Category.newCategory("Filmes", "A categoria mais assistida", true);
         final var expectedId = category.id();
@@ -40,28 +41,30 @@ public class DeleteCategoryUseCaseIT {
         Assertions.assertEquals(1, categoryRepository.count());
 
         // Act
-        Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        Assertions.assertDoesNotThrow(action);
         Assertions.assertEquals(0, categoryRepository.count());
     }
 
     @Test
-    public void givenAnInvalidId_whenCallDeleteCategory_thenShouldBeOk() {
+    void givenAnInvalidId_whenCallDeleteCategory_thenShouldBeOk() {
         // Arrange
         final var expectedId = CategoryId.from("123");
 
         Assertions.assertEquals(0, categoryRepository.count());
 
         // Act
-        Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        Assertions.assertDoesNotThrow(action);
         Assertions.assertEquals(0, categoryRepository.count());
     }
 
     @Test
-    public void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
+    void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
         // Arrange
         final var category = Category.newCategory("Filmes", "A categoria mais assistida", true);
         final var expectedId = category.id();
@@ -70,9 +73,11 @@ public class DeleteCategoryUseCaseIT {
         doThrow(new IllegalStateException(expectedMessageError)).when(categoryGateway).deleteById(eq(expectedId));
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedMessageError, actualException.getMessage());
     }
 

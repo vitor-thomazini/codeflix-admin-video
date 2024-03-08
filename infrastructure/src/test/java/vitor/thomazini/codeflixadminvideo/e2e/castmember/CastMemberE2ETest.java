@@ -11,7 +11,7 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import vitor.thomazini.codeflixadminvideo.E2ETest;
-import vitor.thomazini.codeflixadminvideo.Fixture;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberType;
 import vitor.thomazini.codeflixadminvideo.e2e.MockDsl;
@@ -47,7 +47,8 @@ public class CastMemberE2ETest implements MockDsl {
     }
 
     @Test
-    public void asACatalogAdminIShouldBeAbleToCreateANewCastMemberWithValidValues() throws Exception {
+    void asACatalogAdminIShouldBeAbleToCreateANewCastMemberWithValidValues() throws Exception {
+        // Arrange
         Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
         Assertions.assertEquals(0, castMemberRepository.count());
 
@@ -66,7 +67,7 @@ public class CastMemberE2ETest implements MockDsl {
     }
 
     @Test
-    public void asACatalogAdminIShouldBeAbleToSeeATreatedErrorByCreatingANewCastMemberWithInvalidValues() throws Exception {
+    void asACatalogAdminIShouldBeAbleToSeeATreatedErrorByCreatingANewCastMemberWithInvalidValues() throws Exception {
         Assertions.assertTrue(MYSQL_CONTAINER.isRunning());
         Assertions.assertEquals(0, castMemberRepository.count());
 

@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.delete;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
+class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultDeleteCategoryUseCase useCase;
@@ -28,7 +29,7 @@ public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidId_whenCallDeleteCategory_thenShouldBeOk() {
+    void givenAValidId_whenCallDeleteCategory_thenShouldBeOk() {
         // Arrange
         final var category = Category.newCategory("Filmes", "A categoria mais assistida", true);
         final var expectedId = category.id();
@@ -43,7 +44,7 @@ public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidId_whenCallDeleteCategory_thenShouldBeOk() {
+    void givenAnInvalidId_whenCallDeleteCategory_thenShouldBeOk() {
         // Arrange
         final var expectedId = CategoryId.from("123");
 
@@ -57,7 +58,7 @@ public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
+    void givenAValidId_whenGatewayThrowsException_thenShouldReturnException() {
         // Arrange
         final var category = Category.newCategory("Filmes", "A categoria mais assistida", true);
         final var expectedId = category.id();
@@ -66,11 +67,14 @@ public class DefaultDeleteCategoryUseCaseTest extends UseCaseTest {
         doThrow(new IllegalStateException(expectedMessageError)).when(categoryGateway).deleteById(eq(expectedId));
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
+
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedMessageError, actualException.getMessage());
+
         verify(categoryGateway, times(1)).deleteById(eq(expectedId));
     }
-
 }

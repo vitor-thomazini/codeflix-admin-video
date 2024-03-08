@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.retrieve.list;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -15,7 +16,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
+class DefaultListCategoriesUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultListCategoriesUseCase useCase;
@@ -29,7 +30,7 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidQuery_whenCallListCategories_thenShouldReturnCategories() {
+    void givenAValidQuery_whenCallListCategories_thenShouldReturnCategories() {
         // Arrange
         final var categories = List.of(
                 Category.newCategory("Filmes", null, true),
@@ -46,7 +47,8 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
         final var expectedItemsCount = 2;
         final var expectedResults = expectedPagination.map(CategoryListOutput::from);
 
-        when(categoryGateway.findAll(eq(query))).thenReturn(expectedPagination);
+        when(categoryGateway.findAll(query))
+                .thenReturn(expectedPagination);
 
         // Act
         final var actualResult = useCase.execute(query);
@@ -60,7 +62,7 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidQuery_whenHasNoResults_thenShouldReturnEmptyCategories() {
+    void givenAValidQuery_whenHasNoResults_thenShouldReturnEmptyCategories() {
         // Arrange
         final var categories = List.<Category>of();
 
@@ -74,7 +76,8 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
         final var expectedItemsCount = 0;
         final var expectedResults = expectedPagination.map(CategoryListOutput::from);
 
-        when(categoryGateway.findAll(eq(query))).thenReturn(expectedPagination);
+        when(categoryGateway.findAll(query))
+                .thenReturn(expectedPagination);
 
         // Act
         final var actualResult = useCase.execute(query);
@@ -88,7 +91,7 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidQuery_whenGatewayThrowsException_thenShouldReturnException() {
+    void givenAValidQuery_whenGatewayThrowsException_thenShouldReturnException() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -98,13 +101,15 @@ public class DefaultListCategoriesUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "Gateway error";
         final var query = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        when(categoryGateway.findAll(eq(query)))
+        when(categoryGateway.findAll(query))
                 .thenThrow(new IllegalStateException(expectedErrorMessage));
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(query));
+        final Executable action = () -> useCase.execute(query);
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
 }

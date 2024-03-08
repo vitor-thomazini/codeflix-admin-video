@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @IntegrationTest
-public class CreateCategoryUseCaseIT {
+class CreateCategoryUseCaseIT {
 
     @Autowired
     private CreateCategoryUseCase useCase;
@@ -26,7 +26,7 @@ public class CreateCategoryUseCaseIT {
     private CategoryGateway categoryGateway;
 
     @Test
-    public void givenAValidCommand_whenCallCreateCategory_thenShouldReturnCategoryId() {
+    void givenAValidCommand_whenCallCreateCategory_thenShouldReturnCategoryId() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -57,7 +57,7 @@ public class CreateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallCreateCategory_thenShouldReturnDomainException() {
+    void givenAnInvalidName_whenCallCreateCategory_thenShouldReturnDomainException() {
         // Arrange
         final String expectedName = null;
         final var expectedDescription = "A categoria mais assistida";
@@ -81,7 +81,7 @@ public class CreateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveCategory_whenCallCreateCategory_thenShouldReturnInactiveCategoryId() {
+    void givenAValidCommandWithInactiveCategory_whenCallCreateCategory_thenShouldReturnInactiveCategoryId() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -110,7 +110,7 @@ public class CreateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
+    void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";

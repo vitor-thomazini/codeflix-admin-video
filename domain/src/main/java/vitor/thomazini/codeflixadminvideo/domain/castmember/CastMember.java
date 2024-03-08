@@ -29,7 +29,7 @@ public class CastMember extends AggregateRoot<CastMemberId> {
         selfValidate();
     }
 
-    public static CastMember newMember(final String aName, final CastMemberType aType) {
+    public static CastMember newCastMember(final String aName, final CastMemberType aType) {
         final var anId = CastMemberId.unique();
         final var now = InstantUtils.now();
         return new CastMember(anId, aName, aType, now, now);

@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.application;
+package vitor.thomazini.codeflixadminvideo.domain;
 
 import com.github.javafaker.Faker;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberType;

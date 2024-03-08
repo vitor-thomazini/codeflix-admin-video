@@ -16,7 +16,7 @@ import vitor.thomazini.codeflixadminvideo.infrastructure.category.persistence.Ca
 import java.util.stream.Stream;
 
 @IntegrationTest
-public class ListCategoryUseCaseIT {
+class ListCategoryUseCaseIT {
 
     @Autowired
     private ListCategoriesUseCase useCase;
@@ -39,7 +39,7 @@ public class ListCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAValidTerm_whenTermDoesNotMatchesPrePersisted_thenShouldReturnEmptyPage() {
+    void givenAValidTerm_whenTermDoesNotMatchesPrePersisted_thenShouldReturnEmptyPage() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -76,7 +76,7 @@ public class ListCategoryUseCaseIT {
             "criANças,0,10,1,1,Kids",
             "da Amazon,0,10,1,1,Amazon Originals",
     })
-    public void givenAValidTerm_whenCallsListCategories_thenShouldReturnCategoriesFiltered(
+    void givenAValidTerm_whenCallsListCategories_thenShouldReturnCategoriesFiltered(
             final String expectedTerms,
             final int expectedPage,
             final int expectedPerPage,
@@ -114,7 +114,7 @@ public class ListCategoryUseCaseIT {
             "createdAt,asc,0,10,7,7,Filmes",
             "createdAt,desc,0,10,7,7,Series"
     })
-    public void givenAValidSortAndDirection_whenCallsListCategories_thenShouldReturnCategoriesOrdered(
+    void givenAValidSortAndDirection_whenCallsListCategories_thenShouldReturnCategoriesOrdered(
             final String expectedSort,
             final String expectedDirection,
             final int expectedPage,
@@ -152,7 +152,7 @@ public class ListCategoryUseCaseIT {
             "2,2,2,7,Netflix Originals;Series",
             "3,2,1,7,Sports",
     })
-    public void givenAValidPage_whenCallsListCategories_thenShouldReturnCategoriesPaginated(
+    void givenAValidPage_whenCallsListCategories_thenShouldReturnCategoriesPaginated(
             final int expectedPage,
             final int expectedPerPage,
             final int expectedItemsCount,

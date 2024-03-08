@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.JacksonTest;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 
 import java.time.Instant;
 

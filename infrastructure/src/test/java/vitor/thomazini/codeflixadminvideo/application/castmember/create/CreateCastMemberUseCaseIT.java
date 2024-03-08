@@ -2,9 +2,9 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.create;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberGateway;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberType;
@@ -14,11 +14,11 @@ import vitor.thomazini.codeflixadminvideo.infrastructure.castmember.persistence.
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static vitor.thomazini.codeflixadminvideo.Fixture.CastMembers.type;
-import static vitor.thomazini.codeflixadminvideo.Fixture.name;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.CastMembers.type;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.name;
 
 @IntegrationTest
-public class CreateCastMemberUseCaseIT {
+class CreateCastMemberUseCaseIT {
 
     @Autowired
     private CreateCastMemberUseCase useCase;
@@ -30,7 +30,7 @@ public class CreateCastMemberUseCaseIT {
     private CastMemberGateway castMemberGateway;
 
     @Test
-    public void givenAValidCommand_whenCallsCreateCastMember_shouldReturnIt() {
+    void givenAValidCommand_whenCallsCreateCastMember_shouldReturnIt() {
         // Arrange
         final var expectedName = name();
         final var expectedType = type();
@@ -56,7 +56,7 @@ public class CreateCastMemberUseCaseIT {
     }
 
     @Test
-    public void givenAInvalidName_whenCallsCreateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidName_whenCallsCreateCastMember_shouldThrowsNotificationException() {
         // Arrange
         final String expectedName = null;
         final var expectedType = type();
@@ -67,20 +67,20 @@ public class CreateCastMemberUseCaseIT {
         final var aCommand = CreateCastMemberCommand.with(expectedName, expectedType);
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
-        Assertions.assertEquals(expectedErrorMessage, actualException.errors().get(0).message());
+        Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
 
         verify(castMemberGateway, times(0)).create(any());
     }
 
     @Test
-    public void givenAInvalidType_whenCallsCreateCastMember_shouldThrowsNotificationException() {
+    void givenAInvalidType_whenCallsCreateCastMember_shouldThrowsNotificationException() {
         // Arrange
         final var expectedName = name();
         final CastMemberType expectedType = null;
@@ -91,14 +91,14 @@ public class CreateCastMemberUseCaseIT {
         final var aCommand = CreateCastMemberCommand.with(expectedName, expectedType);
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
-        Assertions.assertEquals(expectedErrorMessage, actualException.errors().get(0).message());
+        Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
 
         verify(castMemberGateway, times(0)).create(any());
     }

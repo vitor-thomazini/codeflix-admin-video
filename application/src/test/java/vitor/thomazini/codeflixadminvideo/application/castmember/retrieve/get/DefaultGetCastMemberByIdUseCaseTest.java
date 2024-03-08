@@ -2,9 +2,9 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.retrieve.get;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import vitor.thomazini.codeflixadminvideo.application.Fixture;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMember;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberGateway;
@@ -18,10 +18,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.CastMembers.type;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.name;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.CastMembers.type;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.name;
 
-public class DefaultGetCastMemberByIdUseCaseTest extends UseCaseTest {
+class DefaultGetCastMemberByIdUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultGetCastMemberByIdUseCase useCase;
@@ -35,13 +35,11 @@ public class DefaultGetCastMemberByIdUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidId_whenCallsGetCastMember_shouldReturnIt() {
+    void givenAValidId_whenCallsGetCastMember_shouldReturnIt() {
         // Arrange
         final var expectedName = name();
         final var expectedType = type();
-
-        final var aMember = CastMember.newMember(expectedName, expectedType);
-
+        final var aMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aMember.id();
 
         when(castMemberGateway.findById(any()))
@@ -58,11 +56,11 @@ public class DefaultGetCastMemberByIdUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(aMember.createdAt(), actualOutput.createdAt());
         Assertions.assertEquals(aMember.updatedAt(), actualOutput.updatedAt());
 
-        verify(castMemberGateway).findById(eq(expectedId));
+        verify(castMemberGateway).findById(expectedId);
     }
 
     @Test
-    public void givenAInvalidId_whenCallsGetCastMemberAndDoesNotExists_shouldReturnNotFoundException() {
+    void givenAInvalidId_whenCallsGetCastMemberAndDoesNotExists_shouldReturnNotFoundException() {
         // Arrange
         final var expectedId = CastMemberId.from("123");
 
@@ -72,11 +70,11 @@ public class DefaultGetCastMemberByIdUseCaseTest extends UseCaseTest {
                 .thenReturn(Optional.empty());
 
         // Act
-        final var actualOutput = Assertions.assertThrows(NotFoundException.class, () -> {
-            useCase.execute(expectedId.value());
-        });
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        final var actualOutput = Assertions.assertThrows(NotFoundException.class, action);
+
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedErrorMessage, actualOutput.getMessage());
 

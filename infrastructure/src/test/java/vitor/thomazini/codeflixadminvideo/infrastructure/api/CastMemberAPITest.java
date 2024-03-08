@@ -7,7 +7,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import vitor.thomazini.codeflixadminvideo.ControllerTest;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.application.castmember.create.CreateCastMemberOutput;
 import vitor.thomazini.codeflixadminvideo.application.castmember.create.DefaultCreateCastMemberUseCase;
 import vitor.thomazini.codeflixadminvideo.application.castmember.delete.DefaultDeleteCastMemberUseCase;
@@ -17,6 +16,7 @@ import vitor.thomazini.codeflixadminvideo.application.castmember.retrieve.list.C
 import vitor.thomazini.codeflixadminvideo.application.castmember.retrieve.list.DefaultListCastMembersUseCase;
 import vitor.thomazini.codeflixadminvideo.application.castmember.update.DefaultUpdateCastMemberUseCase;
 import vitor.thomazini.codeflixadminvideo.application.castmember.update.UpdateCastMemberOutput;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMember;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberType;
@@ -135,7 +135,7 @@ public class CastMemberAPITest {
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 
-        final var aMember = CastMember.newMember(expectedName, expectedType);
+        final var aMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aMember.id().value();
 
         when(getCastMemberByIdUseCase.execute(any()))
@@ -188,7 +188,7 @@ public class CastMemberAPITest {
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 
-        final var aMember = CastMember.newMember(expectedName, expectedType);
+        final var aMember = CastMember.newCastMember(expectedName, expectedType);
         final var expectedId = aMember.id();
 
         final var aCommand = new UpdateCastMemberRequest(expectedName, expectedType);
@@ -219,7 +219,7 @@ public class CastMemberAPITest {
     @Test
     public void givenAnInvalidName_whenCallsUpdateCastMember_shouldReturnNotification() throws Exception {
         // Arrange
-        final var aMember = CastMember.newMember("Vin Di", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("Vin Di", CastMemberType.DIRECTOR);
         final var expectedId = aMember.id();
 
         final String expectedName = null;
@@ -314,7 +314,7 @@ public class CastMemberAPITest {
     @Test
     public void givenValidParams_whenCallListCastMembers_shouldReturnIt() throws Exception {
         // Arrange
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedPage = 1;
         final var expectedPerPage = 20;
@@ -364,7 +364,7 @@ public class CastMemberAPITest {
     @Test
     public void givenEmptyParams_whenCallListCastMembers_shouldUseDefaultsAndReturnIt() throws Exception {
         // Arrange
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;

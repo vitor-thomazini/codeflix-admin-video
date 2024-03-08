@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-public class UpdateGenreUseCaseIT {
+class UpdateGenreUseCaseIT {
 
     @Autowired
     private UpdateGenreUseCase useCase;
@@ -36,7 +37,7 @@ public class UpdateGenreUseCaseIT {
     private GenreRepository genreRepository;
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommand_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var genre = genreGateway.create(
                 Genre.newGenre("acao", true)
@@ -75,7 +76,7 @@ public class UpdateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithCategories_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithCategories_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -122,7 +123,7 @@ public class UpdateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveGenre_whenCallsUpdateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithInactiveGenre_whenCallsUpdateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var genre = genreGateway.create(Genre.newGenre("acao", true));
 
@@ -162,7 +163,7 @@ public class UpdateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsUpdateGenre_thenShouldReturnNotificationException() {
+    void givenAnInvalidName_whenCallsUpdateGenre_thenShouldReturnNotificationException() {
         // Arrange
         final var genre = genreGateway.create(Genre.newGenre("acao", true));
 
@@ -182,21 +183,21 @@ public class UpdateGenreUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
-        Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
-        Assertions.assertEquals(expectedErrorMessage, actualException.errors().get(0).message());
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
+        Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
+
+        verify(genreGateway, times(1)).findById(expectedId);
         verify(categoryGateway, times(0)).existsByIds(any());
         verify(genreGateway, times(0)).update(any());
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsUpdateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnNotificationException() {
+    void givenAnInvalidName_whenCallsUpdateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnNotificationException() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filems", null, true)
@@ -225,17 +226,17 @@ public class UpdateGenreUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessageOne, actualException.errors().get(0).message());
         Assertions.assertEquals(expectedErrorMessageTwo, actualException.errors().get(1).message());
 
-        verify(genreGateway, times(1)).findById(eq(expectedId));
-        verify(categoryGateway, times(1)).existsByIds(eq(expectedCategories));
+        verify(genreGateway, times(1)).findById(expectedId);
+        verify(categoryGateway, times(1)).existsByIds(expectedCategories);
         verify(genreGateway, times(0)).update(any());
     }
 

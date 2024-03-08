@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.delete;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
 import vitor.thomazini.codeflixadminvideo.domain.genre.Genre;
@@ -10,7 +11,7 @@ import vitor.thomazini.codeflixadminvideo.domain.genre.GenreId;
 import vitor.thomazini.codeflixadminvideo.infrastructure.genre.persistence.GenreRepository;
 
 @IntegrationTest
-public class DeleteGenreUseCaseIT {
+class DeleteGenreUseCaseIT {
 
     @Autowired
     private DeleteGenreUseCase useCase;
@@ -22,7 +23,7 @@ public class DeleteGenreUseCaseIT {
     private GenreRepository genreRepository;
 
     @Test
-    public void givenAValidGenreId_whenCallsDeleteGenre_thenShouldDeleteGenre() {
+    void givenAValidGenreId_whenCallsDeleteGenre_thenShouldDeleteGenre() {
         // Arrange
         final var genre = genreGateway.create(
                 Genre.newGenre("Ação", true)
@@ -33,14 +34,15 @@ public class DeleteGenreUseCaseIT {
         Assertions.assertEquals(1, genreRepository.count());
 
         // Act
-        Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        Assertions.assertDoesNotThrow(action);
         Assertions.assertEquals(0, genreRepository.count());
     }
 
     @Test
-    public void givenAnInvalidGenreId_whenCallsDeleteGenre_thenShouldBeOk() {
+    void givenAnInvalidGenreId_whenCallsDeleteGenre_thenShouldBeOk() {
         // Arrange
         genreGateway.create(
                 Genre.newGenre("Ação", true)
@@ -51,9 +53,10 @@ public class DeleteGenreUseCaseIT {
         Assertions.assertEquals(1, genreRepository.count());
 
         // Act
-        Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        Assertions.assertDoesNotThrow(action);
         Assertions.assertEquals(1, genreRepository.count());
     }
 }

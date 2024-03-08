@@ -1,33 +1,34 @@
-package vitor.thomazini.codeflixadminvideo.infrastructure.castmember.models;
+package vitor.thomazini.codeflixadminvideo.infrastructure.genre.models;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 import vitor.thomazini.codeflixadminvideo.JacksonTest;
-import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 
 import java.time.Instant;
 
 @JacksonTest
-class CastMemberListResponseTest {
+class GenreListResponseTest {
 
     @Autowired
-    private JacksonTester<CastMemberListResponse> json;
+    private JacksonTester<GenreListResponse> json;
 
     @Test
     void testMarshall() throws Exception {
         // Arrange
         final var expectedId = "123";
-        final var expectedName = Fixture.name();
-        final var expectedType = Fixture.CastMembers.type().name();
-        final var expectedCreatedAt = Instant.now().toString();
+        final var expectedName = "Ação";
+        final var expectedIsActive = false;
+        final var expectedCreatedAt = Instant.now();
+        final var expectedDeletedAt = Instant.now();
 
-        final var response = new CastMemberListResponse(
+        final var response = new GenreListResponse(
                 expectedId,
                 expectedName,
-                expectedType,
-                expectedCreatedAt
+                expectedIsActive,
+                expectedCreatedAt,
+                expectedDeletedAt
         );
 
         // Act
@@ -37,7 +38,8 @@ class CastMemberListResponseTest {
         Assertions.assertThat(actualJson)
                 .hasJsonPathValue("$.id", expectedId)
                 .hasJsonPathValue("$.name", expectedName)
-                .hasJsonPathValue("$.type", expectedType)
-                .hasJsonPathValue("$.created_at", expectedCreatedAt);
+                .hasJsonPathValue("$.is_active", expectedIsActive)
+                .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
+                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
     }
 }

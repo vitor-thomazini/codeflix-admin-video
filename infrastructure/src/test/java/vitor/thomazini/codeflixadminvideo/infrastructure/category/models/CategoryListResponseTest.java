@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.time.Instant;
 
 @JacksonTest
-public class CategoryListResponseTest {
+class CategoryListResponseTest {
 
     @Autowired
     private JacksonTester<CategoryListResponse> json;
 
     @Test
-    public void testMarshall() throws IOException {
+    void testMarshall() throws IOException {
         // Arrange
         final var expectedId = "123";
         final var expectedName = "Filmes";
@@ -48,7 +48,7 @@ public class CategoryListResponseTest {
     }
 
     @Test
-    public void testUnmarshall() throws IOException {
+    void testUnmarshall() throws IOException {
         // Arrange
         final var expectedId = "123";
         final var expectedName = "Filmes";

@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.retrieve.list;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -16,10 +17,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.CastMembers.type;
-import static vitor.thomazini.codeflixadminvideo.application.Fixture.name;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.CastMembers.type;
+import static vitor.thomazini.codeflixadminvideo.domain.Fixture.name;
 
-public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
+class DefaultListCastMembersUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultListCastMembersUseCase useCase;
@@ -33,11 +34,11 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListCastMembers_shouldReturnAll() {
+    void givenAValidQuery_whenCallsListCastMembers_shouldReturnAll() {
         // Arrange
         final var members = List.of(
-                CastMember.newMember(name(), type()),
-                CastMember.newMember(name(), type())
+                CastMember.newCastMember(name(), type()),
+                CastMember.newCastMember(name(), type())
         );
 
         final var expectedPage = 0;
@@ -61,8 +62,13 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
         when(castMemberGateway.findAll(any()))
                 .thenReturn(expectedPagination);
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
 
         // Act
         final var actualOutput = useCase.execute(aQuery);
@@ -73,11 +79,11 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        verify(castMemberGateway).findAll(eq(aQuery));
+        verify(castMemberGateway).findAll(aQuery);
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListCastMembersAndIsEmpty_shouldReturn() {
+    void givenAValidQuery_whenCallsListCastMembersAndIsEmpty_shouldReturn() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -99,8 +105,13 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
         when(castMemberGateway.findAll(any()))
                 .thenReturn(expectedPagination);
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
 
         // Act
         final var actualOutput = useCase.execute(aQuery);
@@ -111,11 +122,11 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedTotal, actualOutput.total());
         Assertions.assertEquals(expectedItems, actualOutput.items());
 
-        verify(castMemberGateway).findAll(eq(aQuery));
+        verify(castMemberGateway).findAll(aQuery);
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListCastMembersAndGatewayThrowsRandomException_shouldException() {
+    void givenAValidQuery_whenCallsListCastMembersAndGatewayThrowsRandomException_shouldException() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -128,17 +139,22 @@ public class DefaultListCastMembersUseCaseTest extends UseCaseTest {
         when(castMemberGateway.findAll(any()))
                 .thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var aQuery = new SearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection
+        );
 
         // Act
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> {
-            useCase.execute(aQuery);
-        });
+        final Executable action = () -> useCase.execute(aQuery);
 
         // Assert
+        final var actualException = Assertions.assertThrows(IllegalStateException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        verify(castMemberGateway).findAll(eq(aQuery));
+        verify(castMemberGateway).findAll(aQuery);
     }
 }

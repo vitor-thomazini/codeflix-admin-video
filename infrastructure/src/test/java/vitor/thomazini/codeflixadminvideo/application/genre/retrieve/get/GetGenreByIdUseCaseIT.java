@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.retrieve.get;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
 import vitor.thomazini.codeflixadminvideo.domain.category.Category;
@@ -15,7 +16,7 @@ import vitor.thomazini.codeflixadminvideo.domain.genre.GenreId;
 import java.util.List;
 
 @IntegrationTest
-public class GetGenreByIdUseCaseIT {
+class GetGenreByIdUseCaseIT {
 
     @Autowired
     private GetGenreByIdUseCase useCase;
@@ -27,7 +28,7 @@ public class GetGenreByIdUseCaseIT {
     private GenreGateway genreGateway;
 
     @Test
-    public void givenAValidId_whenCallsGetGenre_thenShouldReturnGenre() {
+    void givenAValidId_whenCallsGetGenre_thenShouldReturnGenre() {
         // Arrange
         final var series = categoryGateway.create(
                 Category.newCategory("Séries", null, true)
@@ -65,18 +66,18 @@ public class GetGenreByIdUseCaseIT {
     }
 
     @Test
-    public void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
+    void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
         // Arrange
         final var expectedErrorMessage = "Genre with ID 123 was not found";
 
         final var expectedId = GenreId.from("123");
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
-            useCase.execute(expectedId.value());
-        });
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
 

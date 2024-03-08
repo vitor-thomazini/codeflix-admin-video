@@ -3,6 +3,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.update;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,8 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
+class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultUpdateCategoryUseCase useCase;
@@ -52,7 +52,7 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
                 expectedIsActive
         );
 
-        when(categoryGateway.findById(eq(expectedId)))
+        when(categoryGateway.findById(expectedId))
                 .thenReturn(Optional.of(Category.from(category)));
         when(categoryGateway.update(any())).thenAnswer(returnsFirstArg());
 
@@ -63,7 +63,7 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
         verify(categoryGateway, times(1)).update(argThat(updatedCategory ->
                 Objects.equals(expectedName, updatedCategory.name())
                         && Objects.equals(expectedDescription, updatedCategory.description())
@@ -89,7 +89,7 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
 
         final var command = UpdateCategoryCommand.with(expectedId.value(), expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGateway.findById(eq(expectedId)))
+        when(categoryGateway.findById(expectedId))
                 .thenReturn(Optional.of(Category.from(category)));
 
         // Act
@@ -119,11 +119,12 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
                 expectedIsActive
         );
 
-        when(categoryGateway.findById(eq(expectedId)))
+        when(categoryGateway.findById(expectedId))
                 .thenReturn(Optional.of(Category.from(category)));
-        when(categoryGateway.update(any())).thenAnswer(returnsFirstArg());
 
-        // Pre-Assert
+        when(categoryGateway.update(any()))
+                .thenAnswer(returnsFirstArg());
+
         Assertions.assertTrue(category.isActive());
         Assertions.assertNull(category.deletedAt());
 
@@ -134,7 +135,7 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
         verify(categoryGateway, times(1)).update(argThat(updatedCategory ->
                 Objects.equals(expectedName, updatedCategory.name())
                         && Objects.equals(expectedDescription, updatedCategory.description())
@@ -165,9 +166,11 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
                 expectedIsActive
         );
 
-        when(categoryGateway.findById(eq(expectedId)))
+        when(categoryGateway.findById(expectedId))
                 .thenReturn(Optional.of(Category.from(category)));
-        when(this.categoryGateway.update(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
+
+        when(this.categoryGateway.update(any()))
+                .thenThrow(new IllegalStateException(expectedErrorMessage));
 
         // Act
         final var notification = this.useCase.execute(command).getLeft();
@@ -176,7 +179,7 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).findById(expectedId);
         verify(categoryGateway, times(1)).update(argThat(updatedCategory ->
                 Objects.equals(expectedName, updatedCategory.name())
                         && Objects.equals(expectedDescription, updatedCategory.description())
@@ -204,16 +207,18 @@ public class DefaultUpdateCategoryUseCaseTest extends UseCaseTest {
                 expectedIsActive
         );
 
-        when(categoryGateway.findById(eq(CategoryId.from(expectedId))))
+        when(categoryGateway.findById(CategoryId.from(expectedId)))
                 .thenReturn(Optional.empty());
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(command));
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        verify(categoryGateway, times(1)).findById(eq(CategoryId.from(expectedId)));
+        verify(categoryGateway, times(1)).findById(CategoryId.from(expectedId));
         verify(categoryGateway, times(0)).update(any());
     }
 }

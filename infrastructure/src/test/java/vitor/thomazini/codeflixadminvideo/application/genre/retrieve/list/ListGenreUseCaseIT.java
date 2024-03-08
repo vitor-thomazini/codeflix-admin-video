@@ -13,7 +13,7 @@ import vitor.thomazini.codeflixadminvideo.infrastructure.genre.persistence.Genre
 import java.util.List;
 
 @IntegrationTest
-public class ListGenreUseCaseIT {
+class ListGenreUseCaseIT {
 
     @Autowired
     private ListGenreUseCase useCase;
@@ -25,7 +25,7 @@ public class ListGenreUseCaseIT {
     private GenreRepository genreRepository;
 
     @Test
-    public void givenAValidQuery_whenCallsListGenre_thenShouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenre_thenShouldReturnGenres() {
         // Arrange
         final var genres = List.of(
                 Genre.newGenre("Ação", true),
@@ -71,7 +71,7 @@ public class ListGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_thenShouldReturnGenres() {
+    void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_thenShouldReturnGenres() {
         // Arrange
         final var genres = List.<Genre>of();
 

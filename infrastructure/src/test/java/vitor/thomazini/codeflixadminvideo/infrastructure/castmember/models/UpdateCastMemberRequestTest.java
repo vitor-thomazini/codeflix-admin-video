@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.JacksonTest;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 
 @JacksonTest
 class UpdateCastMemberRequestTest {
@@ -14,7 +14,8 @@ class UpdateCastMemberRequestTest {
     private JacksonTester<UpdateCastMemberRequest> json;
 
     @Test
-    public void testUnmarshall() throws Exception {
+    void testUnmarshall() throws Exception {
+        // Arrange
         final var expectedName = Fixture.name();
         final var expectedType = Fixture.CastMembers.type();
 
@@ -25,8 +26,10 @@ class UpdateCastMemberRequestTest {
                 }
                 """.formatted(expectedName, expectedType);
 
+        // Act
         final var actualJson = this.json.parse(json);
 
+        // Assert
         Assertions.assertThat(actualJson)
                 .hasFieldOrPropertyWithValue("name", expectedName)
                 .hasFieldOrPropertyWithValue("type", expectedType);

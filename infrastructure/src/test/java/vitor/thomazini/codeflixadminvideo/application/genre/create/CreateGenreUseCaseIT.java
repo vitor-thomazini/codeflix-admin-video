@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.create;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-public class CreateGenreUseCaseIT {
+class CreateGenreUseCaseIT {
 
     @Autowired
     private CreateGenreUseCase useCase;
@@ -34,7 +35,7 @@ public class CreateGenreUseCaseIT {
     private GenreRepository genreRepository;
 
     @Test
-    public void givenAValidCommand_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommand_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -71,7 +72,7 @@ public class CreateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithoutCategories_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithoutCategories_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
@@ -104,7 +105,7 @@ public class CreateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveGenre_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithInactiveGenre_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = false;
@@ -137,7 +138,7 @@ public class CreateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAInvalidEmptyName_whenCallsCreateGenre_thenShouldReturnDomainException() {
+   void givenAInvalidEmptyName_whenCallsCreateGenre_thenShouldReturnDomainException() {
         // Arrange
         final var expectedName = " ";
         final var expectedIsActive = true;
@@ -153,11 +154,11 @@ public class CreateGenreUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -167,7 +168,7 @@ public class CreateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAInvalidNullName_whenCallsCreateGenre_thenShouldReturnDomainException() {
+    void givenAInvalidNullName_whenCallsCreateGenre_thenShouldReturnDomainException() {
         // Arrange
         final String expectedName = null;
         final var expectedIsActive = true;
@@ -183,11 +184,11 @@ public class CreateGenreUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -197,7 +198,7 @@ public class CreateGenreUseCaseIT {
     }
 
     @Test
-    public void givenAInvalidName_whenCallsCreateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnDomainException() {
+    void givenAInvalidName_whenCallsCreateGenreAndSomeCategoriesDoesNotExists_thenShouldReturnDomainException() {
         // Arrange
         final var series = categoryGateway.create(
                 Category.newCategory("Séries", null, true)
@@ -221,11 +222,10 @@ public class CreateGenreUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessageOne, actualException.errors().get(0).message());

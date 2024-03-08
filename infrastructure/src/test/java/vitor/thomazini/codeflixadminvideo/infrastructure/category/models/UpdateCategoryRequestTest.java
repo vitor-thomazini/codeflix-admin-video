@@ -9,13 +9,13 @@ import vitor.thomazini.codeflixadminvideo.JacksonTest;
 import java.io.IOException;
 
 @JacksonTest
-public class UpdateCategoryRequestTest {
+class UpdateCategoryRequestTest {
 
     @Autowired
     private JacksonTester<UpdateCategoryRequest> json;
 
     @Test
-    public void testMarshall() throws IOException {
+    void testMarshall() throws IOException {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -38,7 +38,7 @@ public class UpdateCategoryRequestTest {
     }
 
     @Test
-    public void testUnmarshall() throws IOException {
+    void testUnmarshall() throws IOException {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";

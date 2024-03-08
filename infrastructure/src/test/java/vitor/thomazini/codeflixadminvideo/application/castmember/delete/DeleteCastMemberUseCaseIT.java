@@ -2,10 +2,11 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.delete;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMember;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberGateway;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-public class DeleteCastMemberUseCaseIT {
+class DeleteCastMemberUseCaseIT {
 
     @Autowired
     private DeleteCastMemberUseCase useCase;
@@ -30,10 +31,10 @@ public class DeleteCastMemberUseCaseIT {
     private CastMemberGateway castMemberGateway;
 
     @Test
-    public void givenAValidId_whenCallsDeleteCastMember_shouldDeleteIt() {
+    void givenAValidId_whenCallsDeleteCastMember_shouldDeleteIt() {
         // Arrange
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
-        final var aMemberTwo = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMemberTwo = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         final var expectedId = aMember.id();
 
@@ -46,19 +47,19 @@ public class DeleteCastMemberUseCaseIT {
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
 
         // Assert
-        verify(castMemberGateway).deleteById(eq(expectedId));
-
         Assertions.assertEquals(1, this.castMemberRepository.count());
         Assertions.assertFalse(this.castMemberRepository.existsById(expectedId.value()));
         Assertions.assertTrue(this.castMemberRepository.existsById(aMemberTwo.id().value()));
+
+        verify(castMemberGateway).deleteById(expectedId);
     }
 
     @Test
-    public void givenAnInvalidId_whenCallsDeleteCastMember_shouldBeOk() {
+    void givenAnInvalidId_whenCallsDeleteCastMember_shouldBeOk() {
         // Arrange
         this.castMemberRepository.saveAndFlush(
                 CastMemberJpaEntity.from(
-                        CastMember.newMember(Fixture.name(), Fixture.CastMembers.type())
+                        CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type())
                 )
         );
 
@@ -67,18 +68,19 @@ public class DeleteCastMemberUseCaseIT {
         Assertions.assertEquals(1, this.castMemberRepository.count());
 
         // Act
-        Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
-        verify(castMemberGateway).deleteById(eq(expectedId));
-
+        Assertions.assertDoesNotThrow(action);
         Assertions.assertEquals(1, this.castMemberRepository.count());
+
+        verify(castMemberGateway).deleteById(expectedId);
     }
 
     @Test
-    public void givenAValidId_whenCallsDeleteCastMemberAndGatewayThrowsException_shouldReceiveException() {
+    void givenAValidId_whenCallsDeleteCastMemberAndGatewayThrowsException_shouldReceiveException() {
         // Arrange
-        final var aMember = CastMember.newMember(Fixture.name(), Fixture.CastMembers.type());
+        final var aMember = CastMember.newCastMember(Fixture.name(), Fixture.CastMembers.type());
 
         this.castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -90,11 +92,12 @@ public class DeleteCastMemberUseCaseIT {
                 .when(castMemberGateway).deleteById(any());
 
         // Act
-        Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.value()));
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
-        verify(castMemberGateway).deleteById(eq(expectedId));
-
+        Assertions.assertThrows(IllegalStateException.class, action);
         Assertions.assertEquals(1, this.castMemberRepository.count());
+
+        verify(castMemberGateway).deleteById(expectedId);
     }
 }

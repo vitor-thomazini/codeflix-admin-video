@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @MySQLGatewayTest
-public class GenreMySQLGatewayTest {
+class GenreMySQLGatewayTest {
 
     @Autowired
     private CategoryMySQLGateway categoryGateway;
@@ -33,7 +33,7 @@ public class GenreMySQLGatewayTest {
     private GenreRepository genreRepository;
 
     @Test
-    public void givenAValidGenre_whenCallsCreateGenre_thenShouldPersistGenre() {
+    void givenAValidGenre_whenCallsCreateGenre_thenShouldPersistGenre() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -76,7 +76,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidGenreWithoutCategories_whenCallsCreateGenre_thenShouldPersistGenre() {
+    void givenAValidGenreWithoutCategories_whenCallsCreateGenre_thenShouldPersistGenre() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
@@ -114,7 +114,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidGenreWithoutCategories_whenCallsCreateGenreWithCategories_thenShouldPersistGenre() {
+    void givenAValidGenreWithoutCategories_whenCallsCreateGenreWithCategories_thenShouldPersistGenre() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -169,7 +169,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidGenreWithCategories_whenCallsCreateGenreCleaningCategories_thenShouldPersistGenre() {
+    void givenAValidGenreWithCategories_whenCallsCreateGenreCleaningCategories_thenShouldPersistGenre() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -225,7 +225,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidGenreInactive_whenCallsCreateGenreActivating_thenShouldPersistGenre() {
+    void givenAValidGenreInactive_whenCallsCreateGenreActivating_thenShouldPersistGenre() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
@@ -270,7 +270,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAValidGenreActive_whenCallsCreateGenreInactivating_thenShouldPersistGenre() {
+    void givenAValidGenreActive_whenCallsCreateGenreInactivating_thenShouldPersistGenre() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = false;
@@ -315,7 +315,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAPrePersistedGenre_whenCallsDeleteById_thenShouldDeleteGenre() {
+    void givenAPrePersistedGenre_whenCallsDeleteById_thenShouldDeleteGenre() {
         // Arrange
         final var genre = Genre.newGenre("Ação", true);
         genreRepository.saveAndFlush(GenreJpaEntity.from(genre));
@@ -330,7 +330,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAnInvalidGenre_whenCallsDeleteById_thenShouldDeleteGenre() {
+    void givenAnInvalidGenre_whenCallsDeleteById_thenShouldDeleteGenre() {
         // Arrange
         Assertions.assertEquals(0, genreRepository.count());
 
@@ -342,7 +342,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAPrePersistedGenre_whenCallsFindById_thenShouldReturnGenre() {
+    void givenAPrePersistedGenre_whenCallsFindById_thenShouldReturnGenre() {
         // Arrange
         final var movies = categoryGateway.create(
                 Category.newCategory("Filmes", null, true)
@@ -379,7 +379,7 @@ public class GenreMySQLGatewayTest {
     }
 
     @Test
-    public void givenAInvalidGenreId_whenCallsFindById_thenShouldReturnEmpty() {
+    void givenAInvalidGenreId_whenCallsFindById_thenShouldReturnEmpty() {
         // Arrange
         final var expectedId = GenreId.from("123");
 
@@ -392,10 +392,8 @@ public class GenreMySQLGatewayTest {
         Assertions.assertTrue(actualGenre.isEmpty());
     }
 
-    // 00
-
     @Test
-    public void givenEmptyGenres_whenCallFindAll_shouldReturnEmptyList() {
+    void givenEmptyGenres_whenCallFindAll_shouldReturnEmptyList() {
         // Arrange
         final var expectedPage = 0;
         final var expectedPerPage = 1;
@@ -425,7 +423,7 @@ public class GenreMySQLGatewayTest {
             "cien,Ficção científica",
             "terr,Terror",
     })
-    public void givenAValidTerm_whenCallsFindAll_thenShouldReturnFiltered(
+    void givenAValidTerm_whenCallsFindAll_thenShouldReturnFiltered(
             final String expectedTerms,
             final String expectedGenreName
     ) {
@@ -465,7 +463,7 @@ public class GenreMySQLGatewayTest {
             "createdAt,asc,Comédia romântica",
             "createdAt,desc,Ficção científica",
     })
-    public void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnOrdered(
+    void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnOrdered(
             final String expectedSort,
             final String expectedDirection,
             final String expectedGenreName
@@ -504,7 +502,7 @@ public class GenreMySQLGatewayTest {
             "1,2,Drama;Ficção científica",
             "2,1,Terror",
     })
-    public void givenAValidPaging_whenCallsFindAll_thenShouldReturnPaged(
+    void givenAValidPaging_whenCallsFindAll_thenShouldReturnPaged(
             final int expectedPage,
             final int expectedItemsCount,
             final String expectedGenres

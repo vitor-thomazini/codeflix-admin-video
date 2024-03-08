@@ -2,10 +2,11 @@ package vitor.thomazini.codeflixadminvideo.application.castmember.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import vitor.thomazini.codeflixadminvideo.Fixture;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
+import vitor.thomazini.codeflixadminvideo.domain.Fixture;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMember;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberGateway;
 import vitor.thomazini.codeflixadminvideo.domain.castmember.CastMemberId;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
-public class UpdateCastMemberUseCaseIT {
+class UpdateCastMemberUseCaseIT {
 
     @Autowired
     private UpdateCastMemberUseCase useCase;
@@ -32,9 +33,9 @@ public class UpdateCastMemberUseCaseIT {
     private CastMemberGateway castMemberGateway;
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateCastMember_shouldReturnItsIdentifier() {
+    void givenAValidCommand_whenCallsUpdateCastMember_shouldReturnItsIdentifier() {
         // Arrange
-        final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("vin diesel", CastMemberType.DIRECTOR);
 
         this.castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -55,8 +56,7 @@ public class UpdateCastMemberUseCaseIT {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.value(), actualOutput.id());
 
-        final var actualPersistedMember =
-                this.castMemberRepository.findById(expectedId.value()).get();
+        final var actualPersistedMember = this.castMemberRepository.findById(expectedId.value()).get();
 
         Assertions.assertEquals(expectedName, actualPersistedMember.getName());
         Assertions.assertEquals(expectedType, actualPersistedMember.getType());
@@ -68,9 +68,9 @@ public class UpdateCastMemberUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
+    void givenAnInvalidName_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
         // Arrange
-        final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("vin diesel", CastMemberType.DIRECTOR);
 
         this.castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -88,13 +88,12 @@ public class UpdateCastMemberUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
-        Assertions.assertNotNull(actualException);
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
 
+        Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
 
@@ -103,9 +102,9 @@ public class UpdateCastMemberUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidType_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
+    void givenAnInvalidType_whenCallsUpdateCastMember_shouldThrowsNotificationException() {
         // Arrange
-        final var aMember = CastMember.newMember("vin diesel", CastMemberType.DIRECTOR);
+        final var aMember = CastMember.newCastMember("vin diesel", CastMemberType.DIRECTOR);
 
         this.castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(aMember));
 
@@ -123,13 +122,12 @@ public class UpdateCastMemberUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
-        Assertions.assertNotNull(actualException);
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
 
+        Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
 
@@ -138,7 +136,7 @@ public class UpdateCastMemberUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidId_whenCallsUpdateCastMember_shouldThrowsNotFoundException() {
+    void givenAnInvalidId_whenCallsUpdateCastMember_shouldThrowsNotFoundException() {
         // Arrange
         final var expectedId = CastMemberId.from("123");
         final var expectedName = Fixture.name();
@@ -153,13 +151,12 @@ public class UpdateCastMemberUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
-            useCase.execute(aCommand);
-        });
+        final Executable action = () -> useCase.execute(aCommand);
 
         // Assert
-        Assertions.assertNotNull(actualException);
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
 
+        Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
         verify(castMemberGateway).findById(any());

@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.category.update;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import vitor.thomazini.codeflixadminvideo.IntegrationTest;
@@ -19,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @IntegrationTest
-public class UpdateCategoryUseCaseIT {
+class UpdateCategoryUseCaseIT {
 
     @Autowired
     private UpdateCategoryUseCase useCase;
@@ -31,7 +32,7 @@ public class UpdateCategoryUseCaseIT {
     private CategoryGateway categoryGateway;
 
     @Test
-    public void givenAValidCommand_whenCallUpdateCategory_thenShouldReturnCategoryId() {
+    void givenAValidCommand_whenCallUpdateCategory_thenShouldReturnCategoryId() {
         // Arrange
         final var category = Category.newCategory("Film", null, true);
 
@@ -69,7 +70,7 @@ public class UpdateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAnInvalidName_whenCallUpdateCategory_thenShouldReturnDomainException() {
+    void givenAnInvalidName_whenCallUpdateCategory_thenShouldReturnDomainException() {
         // Arrange
         final var category = Category.newCategory("Film", null, true);
 
@@ -97,7 +98,7 @@ public class UpdateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveCategory_whenCallUpdateCategory_thenShouldReturnInactiveCategoryId() {
+    void givenAValidCommandWithInactiveCategory_whenCallUpdateCategory_thenShouldReturnInactiveCategoryId() {
         // Arrange
         final var category = Category.newCategory("Film", null, true);
 
@@ -137,7 +138,7 @@ public class UpdateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
+    void givenAValidCommand_whenGatewayThrowsRandomException_thenShouldReturnAException() {
         // Arrange
         final var category = Category.newCategory("Film", null, true);
 
@@ -180,7 +181,7 @@ public class UpdateCategoryUseCaseIT {
     }
 
     @Test
-    public void givenACommandWithInvalidID_whenCallUpdateCategory_thenShouldReturnInactiveCategoryId() {
+    void givenACommandWithInvalidID_whenCallUpdateCategory_thenShouldReturnInactiveCategoryId() {
         // Arrange
         final var expectedName = "Filmes";
         final var expectedDescription = "A categoria mais assistida";
@@ -196,9 +197,11 @@ public class UpdateCategoryUseCaseIT {
         );
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> useCase.execute(command));
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
+
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
 

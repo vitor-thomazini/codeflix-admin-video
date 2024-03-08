@@ -1,4 +1,4 @@
-package vitor.thomazini.codeflixadminvideo.infrastructure.category.models;
+package vitor.thomazini.codeflixadminvideo.infrastructure.genre.models;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,30 +6,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 import vitor.thomazini.codeflixadminvideo.JacksonTest;
 
-import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
 
 @JacksonTest
-class CategoryResponseTest {
+class GenreResponseTest {
 
     @Autowired
-    private JacksonTester<CategoryResponse> json;
+    private JacksonTester<GenreResponse> json;
 
     @Test
-    void testMarshall() throws IOException {
+    void testMarshall() throws Exception {
         // Arrange
         final var expectedId = "123";
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
+        final var expectedName = "Ação";
+        final var expectedCategories = List.of("123");
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
         final var expectedUpdatedAt = Instant.now();
         final var expectedDeletedAt = Instant.now();
 
-        final var response = new CategoryResponse(
+        final var response = new GenreResponse(
                 expectedId,
                 expectedName,
-                expectedDescription,
+                expectedCategories,
                 expectedIsActive,
                 expectedCreatedAt,
                 expectedUpdatedAt,
@@ -43,42 +43,42 @@ class CategoryResponseTest {
         Assertions.assertThat(actualJson)
                 .hasJsonPathValue("$.id", expectedId)
                 .hasJsonPathValue("$.name", expectedName)
-                .hasJsonPathValue("$.description", expectedDescription)
+                .hasJsonPathValue("$.categories_id", expectedCategories)
                 .hasJsonPathValue("$.is_active", expectedIsActive)
                 .hasJsonPathValue("$.created_at", expectedCreatedAt.toString())
-                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString())
-                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString());
+                .hasJsonPathValue("$.deleted_at", expectedDeletedAt.toString())
+                .hasJsonPathValue("$.updated_at", expectedUpdatedAt.toString());
     }
 
     @Test
-    public void testUnmarshall() throws IOException {
+    void testUnmarshall() throws Exception {
         // Arrange
         final var expectedId = "123";
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
+        final var expectedName = "Ação";
+        final var expectedCategory = "456";
         final var expectedIsActive = false;
         final var expectedCreatedAt = Instant.now();
         final var expectedUpdatedAt = Instant.now();
         final var expectedDeletedAt = Instant.now();
 
         final var json = """
-            {
-                "id": "%s",
-                "name": "%s",
-                "description": "%s",
-                "is_active": %s,
-                "created_at": "%s",
-                "updated_at": "%s",
-                "deleted_at": "%s"
-            }
-        """.formatted(
+                {
+                  "id": "%s",
+                  "name": "%s",
+                  "categories_id": ["%s"],
+                  "is_active": %s,
+                  "created_at": "%s",
+                  "deleted_at": "%s",
+                  "updated_at": "%s"
+                }    
+                """.formatted(
                 expectedId,
                 expectedName,
-                expectedDescription,
+                expectedCategory,
                 expectedIsActive,
-                expectedCreatedAt,
-                expectedUpdatedAt,
-                expectedDeletedAt
+                expectedCreatedAt.toString(),
+                expectedDeletedAt.toString(),
+                expectedUpdatedAt.toString()
         );
 
         // Act
@@ -88,10 +88,10 @@ class CategoryResponseTest {
         Assertions.assertThat(actualJson)
                 .hasFieldOrPropertyWithValue("id", expectedId)
                 .hasFieldOrPropertyWithValue("name", expectedName)
-                .hasFieldOrPropertyWithValue("description", expectedDescription)
-                .hasFieldOrPropertyWithValue("isActive", expectedIsActive)
+                .hasFieldOrPropertyWithValue("categories", List.of(expectedCategory))
+                .hasFieldOrPropertyWithValue("active", expectedIsActive)
                 .hasFieldOrPropertyWithValue("createdAt", expectedCreatedAt)
-                .hasFieldOrPropertyWithValue("updatedAt", expectedUpdatedAt)
-                .hasFieldOrPropertyWithValue("deletedAt", expectedDeletedAt);
+                .hasFieldOrPropertyWithValue("deletedAt", expectedDeletedAt)
+                .hasFieldOrPropertyWithValue("updatedAt", expectedUpdatedAt);
     }
 }

@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.create;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import vitor.thomazini.codeflixadminvideo.application.UseCaseTest;
@@ -17,7 +18,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
+class DefaultCreateGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultCreateGenreUseCase useCase;
@@ -34,14 +35,13 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommand_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryId>of();
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(genreGateway.create(any()))
                 .thenAnswer(returnsFirstArg());
@@ -65,7 +65,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithCategories_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithCategories_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
@@ -74,8 +74,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
                 CategoryId.from("456")
         );
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(categoryGateway.existsByIds(any()))
                 .thenReturn(expectedCategories);
@@ -91,7 +90,6 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput.id());
 
         verify(categoryGateway, times(1)).existsByIds(expectedCategories);
-
         verify(genreGateway, times(1)).create(argThat(genre ->
                 Objects.equals(expectedName, genre.name()) &&
                         Objects.equals(expectedIsActive, genre.isActive()) &&
@@ -104,14 +102,13 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommandWithInactiveGenre_whenCallsCreateGenre_thenShouldReturnGenreId() {
+    void givenAValidCommandWithInactiveGenre_whenCallsCreateGenre_thenShouldReturnGenreId() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = false;
         final var expectedCategories = List.<CategoryId>of();
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(genreGateway.create(any()))
                 .thenAnswer(returnsFirstArg());
@@ -135,7 +132,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidEmptyName_whenCallsCreateGenre_thenShouldReturnDomainException() {
+    void givenAnInvalidEmptyName_whenCallsCreateGenre_thenShouldReturnDomainException() {
         // Arrange
         final var expectedName = " ";
         final var expectedIsActive = true;
@@ -148,11 +145,11 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
                 CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -162,7 +159,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidNullName_whenCallsCreateGenre_thenShouldReturnDomainException() {
+    void givenAnInvalidNullName_whenCallsCreateGenre_thenShouldReturnDomainException() {
         // Arrange
         final String expectedName = null;
         final var expectedIsActive = true;
@@ -171,15 +168,14 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -189,7 +185,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsCreateGenreAndSomeCategoriesDoesExists_thenShouldReturnDomainException() {
+    void givenAValidCommand_whenCallsCreateGenreAndSomeCategoriesDoesExists_thenShouldReturnDomainException() {
         // Arrange
         final var movies = CategoryId.from("123");
         final var series = CategoryId.from("456");
@@ -202,18 +198,17 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "Some categories could not be found: 123, 789";
         final var expectedErrorCount = 1;
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(categoryGateway.existsByIds(any()))
                 .thenReturn(List.of(series));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.errors().getFirst().message());
@@ -223,7 +218,7 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAnInvalidCommand_whenCallsCreateGenreAndSomeCategoriesDoesExists_thenShouldReturnDomainException() {
+    void givenAnInvalidCommand_whenCallsCreateGenreAndSomeCategoriesDoesExists_thenShouldReturnDomainException() {
         // Arrange
         final var movies = CategoryId.from("123");
         final var series = CategoryId.from("456");
@@ -237,18 +232,18 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
         final var expectedErrorMessageTwo = "'name' should not be empty";
         final var expectedErrorCount = 2;
 
-        final var command =
-                CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
+        final var command = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(categoryGateway.existsByIds(any()))
                 .thenReturn(List.of(series));
 
         // Act
-        final var actualException = Assertions.assertThrows(NotificationException.class, () -> {
-            useCase.execute(command);
-        });
+        final Executable action = () -> useCase.execute(command);
+
 
         // Assert
+        final var actualException = Assertions.assertThrows(NotificationException.class, action);
+
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.errors().size());
         Assertions.assertEquals(expectedErrorMessageOne, actualException.errors().get(0).message());
@@ -256,11 +251,5 @@ public class DefaultCreateGenreUseCaseTest extends UseCaseTest {
 
         verify(categoryGateway, times(1)).existsByIds(expectedCategories);
         verify(genreGateway, times(0)).create(any());
-    }
-
-    public List<String> asString(final List<CategoryId> categories) {
-        return categories.stream()
-                .map(CategoryId::value)
-                .toList();
     }
 }

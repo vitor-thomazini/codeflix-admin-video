@@ -21,7 +21,7 @@ public non-sealed class DefaultCreateCastMemberUseCase extends CreateCastMemberU
         final var aType = aCommand.type();
 
         final var notification = Notification.create();
-        final var aMember = notification.validate(() -> CastMember.newMember(aName, aType));
+        final var aMember = notification.validate(() -> CastMember.newCastMember(aName, aType));
         if (notification.hasErrors()) {
             notify(notification);
         }

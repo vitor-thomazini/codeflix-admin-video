@@ -2,6 +2,7 @@ package vitor.thomazini.codeflixadminvideo.application.genre.retrieve.get;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,10 +18,9 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class DefaultGetGenreByIdUseCaseTest extends UseCaseTest {
+class DefaultGetGenreByIdUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultGetGenreByIdUseCase useCase;
@@ -34,7 +34,7 @@ public class DefaultGetGenreByIdUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAValidId_whenCallsGetGenre_shouldReturnGenre() {
+    void givenAValidId_whenCallsGetGenre_shouldReturnGenre() {
         // Arrange
         final var expectedName = "Ação";
         final var expectedIsActive = true;
@@ -63,30 +63,24 @@ public class DefaultGetGenreByIdUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(genre.updatedAt(), actualGenre.updatedAt());
         Assertions.assertEquals(genre.deletedAt(), actualGenre.deletedAt());
 
-        Mockito.verify(genreGateway, times(1)).findById(eq(expectedId));
+        verify(genreGateway, times(1)).findById(expectedId);
     }
 
     @Test
-    public void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
+    void givenAValidId_whenCallsGetGenreAndDoesNotExists_thenShouldReturnNotFound() {
         // Arrange
         final var expectedMessage = "Genre with ID 123 was not found";
         final var expectedId = GenreId.from("123");
 
-        when(genreGateway.findById(eq(expectedId)))
+        when(genreGateway.findById(expectedId))
                 .thenReturn(Optional.empty());
 
         // Act
-        final var actualException = Assertions.assertThrows(NotFoundException.class, () -> {
-            useCase.execute(expectedId.value());
-        });
+        final Executable action = () -> useCase.execute(expectedId.value());
 
         // Assert
-        Assertions.assertEquals(expectedMessage, actualException.getMessage());
-    }
+        final var actualException = Assertions.assertThrows(NotFoundException.class, action);
 
-    private List<String> asString(final List<CategoryId> categories) {
-        return categories.stream()
-                .map(CategoryId::value)
-                .toList();
+        Assertions.assertEquals(expectedMessage, actualException.getMessage());
     }
 }
